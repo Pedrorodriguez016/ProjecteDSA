@@ -24,18 +24,18 @@ public class GameManagerImpl implements GameManager {
         return instance;
     }
 
-    //Function that adds the generated user from the function addUser to the list of Users
+    //Function that adds the generated user from the function addUser to the list of users
     public User addUser(User user) {
-        logger.info("Petition for a new User: " + user);
+        logger.info("Petition for a new user: " + user);
         this.users.add(user);
         logger.info("User added successfully");
         return user;
     }
 
-    //Functions that takes all the values necessaries to construct a new User and
+    //Functions that takes all the values necessaries to construct a new user and
     //passes them as a user object to be initialized
-    public User createUser(Integer id, String name, String password, String email, String birthday){
-        return this.addUser(new User(id, name, password, email, birthday));
+    public User createUser(Integer id, String name, String password, String email){
+        return this.addUser(new User(id, name, password, email));
     }
 
     //Function that returns the user with a specific ID number

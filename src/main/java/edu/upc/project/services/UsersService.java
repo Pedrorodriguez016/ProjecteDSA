@@ -24,9 +24,33 @@ public class UsersService {
     public UsersService() {
         this.gm = GameManagerImpl.getInstance();
         if (gm.sizeUsers()==0) {
-            this.gm.createUser(0, "Jonathan", "iitifjdoe", "g@g.com", "04/11/1964");
-            this.gm.createUser(1, "Mary", "rfotk98693", "e@e.com", "13/12/1985");
+            this.gm.createUser(0, "Jonathan", "iitifjdoe", "g@g.com");
+            this.gm.createUser(1, "Mary", "rfotk98693", "e@e.com");
         }
+    }
+
+    @POST
+    @ApiOperation(value = "login a user to the game")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "User and password combination not found"),
+            @ApiResponse(code = 500, message = "Validation error")
+
+    })
+
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response loginUser(User user) {
+        if (user.getUsername() == null || user.getPassword() == null)
+            return Response.status(500).build();
+        for (User userlist : this.gm.listUsers())
+        {
+            if (user.getUsername().equals(userlist.getUsername()) && user.getPassword().equals(userlist.getPassword()))
+            {
+                return Response.status(201).build();
+            }
+        }
+        return Response.status(404).build();
     }
 
     @GET
@@ -67,7 +91,7 @@ public class UsersService {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newUser(User user) {
-        if (user.getUsername() == null || user.getPassword() == null || user.getEmail() == null || user.getBirthday() == null)
+        if (user.getUsername() == null || user.getPassword() == null || user.getEmail() == null)
             return Response.status(500).entity(user).build();
         if (user.getId() == null)
         {
