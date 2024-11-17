@@ -1,7 +1,7 @@
-# rest-minim-1
-Desenvolupat:
-- Totes les consultes
-- Tots els tests
-- Servei REST
-- Logger de les funcions
-- Servei singleton
+# Backend
+Desarrollado:
+- Iniciado de sesión
+- Registro de cuenta nueva
+- Creación de nuevos objetos para la tienda
+- Exportado de listado de productos en tienda
+- Listado de usuarios
