@@ -7,8 +7,8 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface MainService {
-    @POST("/login")
+    @POST("Datos")
     Call<List<Datos>> CreateDATOS(@Body Datos d);
-    @POST("/reister")
+    @POST("DatosRegistro")
     Call<List<DatosRegistro>> CreateDATOSregistro(@Body DatosRegistro d);
 }
