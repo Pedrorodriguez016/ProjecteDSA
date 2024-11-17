@@ -28,6 +28,7 @@ public class StoreService {
             this.gm.createItem(0, ElementType.KNIFE, 154);
             this.gm.createItem(1, ElementType.ARMOR, 175);
             this.gm.createItem(2, ElementType.SWORD, 4896);
+            this.gm.createItem(3, ElementType.POTION, 34);
         }
     }
 
