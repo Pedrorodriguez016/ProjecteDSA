@@ -14,50 +14,105 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-
-
+    private EditText editTextUsername;
+    private EditText editTextPassword;
+    private EditText editTextEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Validamos los campos de EditText
+        editTextUsername = findViewById(R.id.name);
+        editTextPassword = findViewById(R.id.password);
+        editTextEmail = findViewById(R.id.mail);
 
     }
-    EditText editText = (EditText) findViewById(R.id.name);
-    String usrname = editText.getText().toString();
-    EditText editText2 = (EditText) findViewById(R.id.password);
-    String pswd = editText2.getText().toString();
-    EditText editText3 = (EditText) findViewById(R.id.mail);
-    String mail = editText3.getText().toString();
 
     public void LoginOnClick(View v) {
-        Datos d = new Datos(usrname, pswd);
+        String usrname = editTextUsername.getText().toString();
+        String password = editTextPassword.getText().toString();
+        //Validar el input
+        if (username.isEmpty() || password.isEmpty()) {
+
+            Toast.makeText(this, "Rellena los campos.", Toast.LENGTH_SHORT).show();
+            return;
+
+        }
+
+        Datos datosLogin = new Datos(username, password);
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2/dsaApp/")
+                .baseUrl("http://10.0.2.2/game/")
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         MainService login = retrofit.create(MainService.class);
-        Call<List<Datos>> call = login.CreateDATOS(d);
+        Call<List<Datos>> call = login.CreateDATOS(datosLogin);
         String respuesta = null;
+
+        call.enqueue(new Callback<List<Datos>>() {
+
+            @Override
+            public void onResponse(Call<List<Datos>> call, Response<List<Datos>> response) {
+
+                if (response.isSuccessful()) {
+                    //Login exitoso
+                    Toast.makeText(MainActivity.this, "Login exitoso", Toast.LENGTH_SHORT).show();
+
+                    //Empezar ShopActivity
+                    Intent intent = new Intent(MainActivity.this, ShopActivity.class);
+
+                    //Pasarle info de login a ShopActivity
+                    intent.putExtra("Usuario", username);
+                    startActivity(intent);
+                    finish();
+
+                } else {
+                    //Por si falla el login
+                    Toast.makeText(MainActivity.this, "Ha fallado el login. Inténtalo otra vez.", Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Datos>> call, Throwable t) {
+
+                Toast.makeText(MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
     }
 
 
     public void RegisteronClick(View v) {
-        DatosRegistro d = new DatosRegistro(usrname, pswd, mail);
+
+        String username = editTextUsername.getText().toString();
+        String password = editTextPassword.getText().toString();
+        String email = editTextEmail.getText().toString();
+        //Validar el input
+        if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
+
+            Toast.makeText(this, "Rellena los campos.", Toast.LENGTH_SHORT).show();
+            return;
+
+        }
+
+        DatosRegistro datosRegistro = new DatosRegistro(username, password, email);
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2/dsaApp/")
+                .baseUrl("http://10.0.2.2/game/")
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -66,8 +121,36 @@ public class MainActivity extends AppCompatActivity {
         Call<List<DatosRegistro>> call = register.CreateDATOSregistro(d);
         String respuesta = null;
 
+        call.enqueue(new CallBack<List<DatosRegistro>>() {
 
-    }
+            @Override
+            public void onResponse(Call<List<DatosRegistro>> call, Response<List<DatosRegistro>> response) {
+
+                if (response.isSuccesful()) {
+                    //Registro con éxito
+                    Toast.makeText(MainActivity.this, "Registro completado.", Toast.LENGTH_SHORT).show();
+                    //Vaciar campos
+                    editTextUsername.setText("");
+                    editTextPassword.setText("");
+                    editTextEmail.setText("");
+
+                } else {
+                    //Falla el registro
+                    Toast.makeText(MainActivity.this, "Registro fallido. Inténtalo otra vez.", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<DatosRegistro>> call, Throwable t){
+
+                Toast.makeText(MainActivity.this, "Error de network:" + t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+
+    });
 }
 
 
