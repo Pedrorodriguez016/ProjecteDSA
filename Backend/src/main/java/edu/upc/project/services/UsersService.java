@@ -2,6 +2,7 @@ package edu.upc.project.services;
 
 import edu.upc.project.GameManager;
 import edu.upc.project.GameManagerImpl;
+import edu.upc.project.config.CORS;
 import edu.upc.project.models.Item;
 import edu.upc.project.models.User;
 import io.swagger.annotations.Api;
@@ -30,6 +31,7 @@ public class UsersService {
     }
 
     @POST
+    @CORS
     @ApiOperation(value = "login a user to the game")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful"),
@@ -51,6 +53,16 @@ public class UsersService {
             }
         }
         return Response.status(404).build();
+    }
+
+    @OPTIONS
+    @Path("/login")
+    public Response optionsForLogin() {
+        return Response.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Authorization")
+                .build();
     }
 
     @GET
@@ -81,6 +93,7 @@ public class UsersService {
     }
 
     @POST
+    @CORS
     @ApiOperation(value = "create a new user")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = User.class),
@@ -99,6 +112,16 @@ public class UsersService {
         }
         this.gm.addUser(user);
         return Response.status(201).entity(user).build();
+    }
+
+    @OPTIONS
+    @Path("/")
+    public Response optionsForRegister() {
+        return Response.ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Authorization")
+                .build();
     }
 
     @GET

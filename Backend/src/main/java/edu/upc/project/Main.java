@@ -1,5 +1,6 @@
 package edu.upc.project;
 
+import edu.upc.project.config.CORSFilter;
 import edu.upc.project.config.MOXyJSON;
 import io.swagger.jaxrs.config.BeanConfig;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -29,6 +30,7 @@ public class Main {
 
         // Register the custom JacksonJsonProvider
         rc.register(MOXyJSON.class);
+        rc.register(CORSFilter.class);
 
         rc.register(io.swagger.jaxrs.listing.ApiListingResource.class);
         rc.register(io.swagger.jaxrs.listing.SwaggerSerializers.class);
