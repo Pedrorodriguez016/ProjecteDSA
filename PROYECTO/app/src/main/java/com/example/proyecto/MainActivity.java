@@ -3,6 +3,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -34,24 +35,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void LoginOnClick(View v) {
-        String usrname = editTextUsername.getText().toString();
+        String name = editTextUsername.getText().toString();
         String password = editTextPassword.getText().toString();
         //Validar el input
-        if (usrname.isEmpty() || password.isEmpty()) {
+        if (name.isEmpty() || password.isEmpty()) {
 
             Toast.makeText(this, "Rellena los campos.", Toast.LENGTH_SHORT).show();
             return;
 
         }
 
-        Datos datosLogin = new Datos(usrname, password);
+        Datos datosLogin = new Datos(name, password);
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2/game/")
+                .baseUrl("http://10.0.2.2:8080/game/")
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -68,10 +69,10 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     //Login exitoso
                     Toast.makeText(MainActivity.this, "Login exitoso", Toast.LENGTH_SHORT).show();
-
+                Log.i("INFO", "Sesion Iniciada");
                     //Empezar ShopActivity
                     Intent intent = new Intent(MainActivity.this, ShopActivity.class);
-
+                    Log.i("INFO", "Credenciales incorrectas");
 
 
                 } else {
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<List<Datos>> call, Throwable t) {
 
                 Toast.makeText(MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-
+                Log.i("Error", t.getMessage());
             }
 
         });
@@ -95,25 +96,25 @@ public class MainActivity extends AppCompatActivity {
 
     public void RegisteronClick(View v) {
 
-        String username = editTextUsername.getText().toString();
+        String name = editTextUsername.getText().toString();
         String password = editTextPassword.getText().toString();
         String email = editTextEmail.getText().toString();
         //Validar el input
-        if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
+        if (name.isEmpty() || password.isEmpty() || email.isEmpty()) {
 
             Toast.makeText(this, "Rellena los campos.", Toast.LENGTH_SHORT).show();
             return;
 
         }
 
-        DatosRegistro d = new DatosRegistro(username, password, email);
+        DatosRegistro d = new DatosRegistro(name, password, email);
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2/game/")
+                .baseUrl("http://10.0.2.2:8080/game/")
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
