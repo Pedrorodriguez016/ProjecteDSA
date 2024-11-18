@@ -170,5 +170,39 @@
     });
   });
   </script>
+
+<!-- Function to request the list of items in the store -->
+<script>
+$(document).ready(function() {
+    function loadProducts() {
+        $.ajax({
+            url: 'http://localhost:8080/game/store',
+            method: 'GET',
+            success: function(data) {
+                console.log(data); // Verificar los datos en la consola
+                const itemList = $('#itemList');
+                itemList.empty();
+
+                // Crear filas dinámicamente basándose en el diseño proporcionado
+                data.forEach(function(item) {
+                    itemList.append(`
+                        <tr>
+                            <td>${item.type}</td>
+                            <td>${item.value}</td>
+                        </tr>
+                    `);
+                });
+            },
+            error: function() {
+                alert('Failed to load products');
+            }
+        });
+    }
+
+    // Cargar los productos al inicializar
+    loadProducts();
+});
+</script>
+
 </body>
 </html>

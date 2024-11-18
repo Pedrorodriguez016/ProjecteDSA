@@ -4,22 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326170ab-b754-4f37-a57c-1cf7c3d7cf35" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PROYECTO/app/src/main/java/com/example/proyecto/ShopActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PROYECTO/app/src/main/java/com/example/proyecto/ShopAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PROYECTO/app/src/main/java/com/example/proyecto/ShopItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PROYECTO/app/src/main/res/drawable/escudo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PROYECTO/app/src/main/res/drawable/knife.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PROYECTO/app/src/main/res/drawable/potion.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PROYECTO/app/src/main/res/drawable/sword.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PROYECTO/app/src/main/res/layout/activity_shop.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PROYECTO/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PROYECTO/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PROYECTO/app/src/main/java/com/example/proyecto/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/PROYECTO/app/src/main/java/com/example/proyecto/MainActivity.java" afterDir="false" />
-    </list>
+    <list default="true" id="326170ab-b754-4f37-a57c-1cf7c3d7cf35" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,6 +16,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "MartinGarciaRevilla"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Pedrorodriguez016/ProjecteDSA.git",
+    "accountId": "1c68d7a7-0753-40d1-86b8-c1ef7871f27c"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -51,7 +48,7 @@
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Uri/Documents/GitHub/ProjecteDSA/PROYECTO/app/src/main/res/drawable",
+    "last_opened_file_path": "C:/ProyectoDSA/ProjecteDSA",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",

@@ -59,8 +59,7 @@ public class UsersService {
     @Path("/login")
     public Response optionsForLogin() {
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "POST, OPTIONS")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Authorization")
                 .build();
     }
@@ -118,7 +117,6 @@ public class UsersService {
     @Path("/")
     public Response optionsForRegister() {
         return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Authorization")
                 .build();
