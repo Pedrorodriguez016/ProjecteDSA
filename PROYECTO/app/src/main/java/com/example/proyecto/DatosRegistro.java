@@ -3,12 +3,12 @@ package com.example.proyecto;
 
 
 public class DatosRegistro {
-    public String username;
+    public String name;
     public String password;
     public String mail;
 
     public DatosRegistro(String username, String password, String mail) {
-        this.username = username;
+        this.name = username;
         this.password = password;
         this.mail= mail;
     }
@@ -22,7 +22,7 @@ public class DatosRegistro {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.name = username;
     }
 
     public String getMail() {
@@ -34,7 +34,7 @@ public class DatosRegistro {
     }
 
     public String getUsername() {
-        return username;
+        return name;
     }
 
 }

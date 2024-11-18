@@ -1,12 +1,12 @@
 package com.example.proyecto;
 
 public class Datos {
-    public String username;
+    public String name;
     public String password;
 
 
     public Datos(String username, String password) {
-        this.username = username;
+        this.name = username;
         this.password = password;
     }
 
@@ -17,7 +17,7 @@ public class Datos {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.name = username;
     }
 
 
@@ -26,6 +26,6 @@ public class Datos {
     }
 
     public String getUsername() {
-        return username;
+        return name;
     }
 }
