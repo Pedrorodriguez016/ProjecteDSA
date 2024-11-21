@@ -52,13 +52,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/game/")
+                .baseUrl("http://10.0.2.2:8080/")
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         MainService login = retrofit.create(MainService.class);
-        Call<List<Datos>> call = login.CreateDATOS(datosLogin);
+        Call<List<Datos>> call = login.loginUser(datosLogin);
         String respuesta = null;
 
         call.enqueue(new Callback<List<Datos>>() {
@@ -94,64 +94,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void RegisteronClick(View v) {
-
-        String name = editTextUsername.getText().toString();
-        String password = editTextPassword.getText().toString();
-        String email = editTextEmail.getText().toString();
-        //Validar el input
-        if (name.isEmpty() || password.isEmpty() || email.isEmpty()) {
-
-            Toast.makeText(this, "Rellena los campos.", Toast.LENGTH_SHORT).show();
-            return;
-
-        }
-
-        DatosRegistro d = new DatosRegistro(name, password, email);
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/game/")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        MainService register = retrofit.create(MainService.class);
-        Call<List<DatosRegistro>> call = register.CreateDATOSregistro(d);
-        String respuesta = null;
-
-        call.enqueue(new Callback<List<DatosRegistro>>() {
-
-            @Override
-            public void onResponse(Call<List<DatosRegistro>> call, Response<List<DatosRegistro>> response) {
-
-                if (response.isSuccessful()) {
-                    //Registro con éxito
-                    Toast.makeText(MainActivity.this, "Registro completado.", Toast.LENGTH_SHORT).show();
-                    //Vaciar campos
-                    editTextUsername.setText("");
-                    editTextPassword.setText("");
-                    editTextEmail.setText("");
-
-                } else {
-                    //Falla el registro
-                    Toast.makeText(MainActivity.this, "Registro fallido. Inténtalo otra vez.", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<DatosRegistro>> call, Throwable t) {
-
-                Toast.makeText(MainActivity.this, "Error de network:" + t.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-
-        })
-    ;}
+  public void registerOnClick(View v){
+      Intent intent = new Intent (MainActivity.this, RegistrarUsuario.class);
+      startActivity(intent);
+    }
 }
 
 

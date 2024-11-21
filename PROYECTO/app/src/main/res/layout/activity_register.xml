@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/emailText"
+        android:layout_width="231dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="204dp"
+        android:text="Email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/usernameText"
+        android:layout_width="239dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="40dp"
+        android:text="Username"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailText" />
+
+    <TextView
+        android:id="@+id/contraseñaText"
+        android:layout_width="239dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="36dp"
+        android:text="Contraseña"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameText" />
+
+    <TextView
+        android:id="@+id/confirmacionText"
+        android:layout_width="239dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="28dp"
+        android:text="Confirma la contraseña"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contraseñaText" />
+
+    <Button
+        android:id="@+id/registrobtn"
+        android:layout_width="188dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="48dp"
+        android:text="Registrar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirmacionText" />
+</androidx.constraintlayout.widget.ConstraintLayout>
