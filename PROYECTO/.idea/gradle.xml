@@ -2,6 +2,7 @@
 <project version="4">
   <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
+<<<<<<< HEAD
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -15,5 +16,8 @@
         <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
+=======
+    <option name="parallelModelFetch" value="true" />
+>>>>>>> 25123d8d5a05928b4d155ead995d58487b7f8f96
   </component>
 </project>

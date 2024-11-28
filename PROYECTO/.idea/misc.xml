@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
@@ -6,4 +7,9 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectRootManager" version="2" project-jdk-name="Android API 34, extension level 7 Platform" project-jdk-type="Android SDK" />
+>>>>>>> 25123d8d5a05928b4d155ead995d58487b7f8f96
 </project>
