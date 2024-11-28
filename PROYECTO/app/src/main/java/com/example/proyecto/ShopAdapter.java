@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+
 public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
     private List<Item> items;
     private Context context;
@@ -35,22 +36,24 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Item item = items.get(position);
-        holder.itemName.setText(String.valueOf(item.getId())); // o el campo que quieras mostrar
+        holder.itemName.setText(item.getType());
         holder.itemPrice.setText(item.getValue() + " coins");
 
-        // Set image based on item value u otro criterio
-        switch(item.getValue()) {
-            case 175:
+        switch(item.getType()) {
+            case "SWORD":
+                holder.itemImage.setImageResource(R.drawable.sword);
+                break;
+            case "ARMOR":
                 holder.itemImage.setImageResource(R.drawable.armadura);
                 break;
-            case 154:
+            case "SHIELD":
+                holder.itemImage.setImageResource(R.drawable.escudo);
+                break;
+            case "KNIFE":
                 holder.itemImage.setImageResource(R.drawable.knife);
                 break;
-            case 34:
+            case "POTION":
                 holder.itemImage.setImageResource(R.drawable.potion);
-                break;
-            case 4896:
-                holder.itemImage.setImageResource(R.drawable.sword);
                 break;
         }
 
