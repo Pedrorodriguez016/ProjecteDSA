@@ -56,13 +56,13 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         MainService login = retrofit.create(MainService.class);
-        Call<List<Datos>> call = login.loginUser(datosLogin);
+        Call<Void> call = login.loginUser(datosLogin);
         String respuesta = null;
 
-        call.enqueue(new Callback<List<Datos>>() {
+        call.enqueue(new Callback <Void>() {
 
             @Override
-            public void onResponse(Call<List<Datos>> call, Response<List<Datos>> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
 
                 if (response.isSuccessful()) {
                     //Login exitoso
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Datos>> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
 
                 Toast.makeText(MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.i("Error", t.getMessage());
