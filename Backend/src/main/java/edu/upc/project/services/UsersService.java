@@ -144,6 +144,7 @@ public class UsersService {
     @ApiOperation(value = "Add an item to the inventory of an user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful"),
+            @ApiResponse(code = 401, message = "Purchase not allowed"),
             @ApiResponse(code = 404, message = "User/item not found")
 
     })
@@ -152,11 +153,21 @@ public class UsersService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addItemInventory(@PathParam("id") Integer userID, @QueryParam("item") int itemID)
     {
-        if (this.gm.addItemInventory(userID, itemID) == null)
-            return Response.status(404).build();
-        else
+        Integer result = this.gm.addItemInventory(userID, itemID);
+        switch (result)
         {
-            return Response.status(200).build();
+            case -1:
+            {
+                return Response.status(404).build();
+            }
+            case -2:
+            {
+                return Response.status(401).build();
+            }
+            default:
+            {
+                return Response.status(200).build();
+            }
         }
     }
 }

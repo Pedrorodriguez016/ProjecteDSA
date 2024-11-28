@@ -5,16 +5,18 @@ import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
-@XmlType(propOrder = {"id", "username", "password", "email", "inventory"})
+@XmlType(propOrder = {"id", "username", "password", "email", "money", "inventory"})
 public class User {
 
     Integer id;
     String username;
     String password;
     String email;
+    Integer money;
     List<Item> inventory;
 
     public User() {
+        this.money = 0;
         this.inventory = new ArrayList<>();
     }
 
@@ -64,6 +66,17 @@ public class User {
         this.email = email;
     }
 
+    @XmlElement(name = "money")
+    public Integer getMoney()
+    {
+        return money;
+    }
+
+    public void setMoney(Integer money)
+    {
+        this.money = money;
+    }
+
     @XmlElement(name = "inventory")
     public List<Item> getInventory()
     {
@@ -82,7 +95,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", inventory=" + inventory + "]";
+        return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", money=" + money + ", inventory=" + inventory + "]";
     }
 
 }

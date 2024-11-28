@@ -13,7 +13,7 @@ public interface GameManager {
     public User getUser(Integer id);
 
     public List<User> listUsers();
-    public List<Item> addItemInventory(Integer userID, Integer itemID);
+    public Integer addItemInventory(Integer userID, Integer itemID);
 
     public int sizeUsers();
     public int sizeItemsStore();

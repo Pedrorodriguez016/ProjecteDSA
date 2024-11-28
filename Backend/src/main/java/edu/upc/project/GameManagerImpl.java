@@ -72,25 +72,37 @@ public class GameManagerImpl implements GameManager {
     }
 
     //Function that adds an item to the inventory of an user
-    public List<Item> addItemInventory(Integer userID, Integer itemID)
+    public Integer addItemInventory(Integer userID, Integer itemID)
     {
         logger.info("Petition to add to the inventory of user with ID " + userID + " the item with ID " + itemID);
         User user = getUser(userID);
         if (user == null)
         {
-            return null;
+            return -1;
         }
         Item item = getItem(itemID);
+
+        //Checks if the item selected exists
         if (item == null)
         {
             logger.warn("Item not added to the inventory of user with ID " + userID + " because the item does not exist");
-            return null;
+            return -1;
+        }
+        Integer usermoney = user.getMoney();
+        Integer itemvalue = item.getValue();
+
+        //Check if the user has enough money to buy the item
+        if (itemvalue > usermoney)
+        {
+            logger.warn("Item with ID " + itemID + " not added to user with ID " + userID + "because of a lack of funds");
+            return -2;
         }
         else
         {
             user.addInventory(item);
+            user.setMoney(usermoney - itemvalue);
             logger.info("Item with ID " + itemID + " added to user with ID " + userID);
-            return user.getInventory();
+            return 0;
         }
     }
 
