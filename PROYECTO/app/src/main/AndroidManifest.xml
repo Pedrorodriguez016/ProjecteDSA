@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".RegistrarUsuario"
             android:exported="false"></activity>
+        <activity android:name=".ShopActivity"
+            android:exported="false"></activity>
     </application>
 
 </manifest>

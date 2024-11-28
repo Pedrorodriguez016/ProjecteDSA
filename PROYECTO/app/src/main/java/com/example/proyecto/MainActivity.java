@@ -21,7 +21,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
     private EditText editTextUsername;
     private EditText editTextPassword;
-    private EditText editTextEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         //Validamos los campos de EditText
         editTextUsername = findViewById(R.id.name);
         editTextPassword = findViewById(R.id.password);
-        editTextEmail = findViewById(R.id.mail);
 
     }
 
@@ -69,13 +67,14 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     //Login exitoso
                     Toast.makeText(MainActivity.this, "Login exitoso", Toast.LENGTH_SHORT).show();
-                Log.i("INFO", "Sesion Iniciada");
+                    Log.i("INFO", "Sesion Iniciada");
                     //Empezar ShopActivity
                     Intent intent = new Intent(MainActivity.this, ShopActivity.class);
-                    Log.i("INFO", "Credenciales incorrectas");
+                    startActivity(intent);
 
 
-                } else {
+                }
+                else {
                     //Por si falla el login
                     Toast.makeText(MainActivity.this, "Ha fallado el login. Inténtalo otra vez.", Toast.LENGTH_SHORT).show();
 
