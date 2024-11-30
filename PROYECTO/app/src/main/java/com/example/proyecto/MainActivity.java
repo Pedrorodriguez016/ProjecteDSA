@@ -2,6 +2,7 @@ package com.example.proyecto;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -68,9 +69,16 @@ public class MainActivity extends AppCompatActivity {
                     //Login exitoso
                     Toast.makeText(MainActivity.this, "Login exitoso", Toast.LENGTH_SHORT).show();
                     Log.i("INFO", "Sesion Iniciada");
+                    SharedPreferences prefs= getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean("isLoggedIn", true);
+                    editor.putString("username", name);
+                    editor.putString("password", password);
+                    editor.apply();
                     //Empezar ShopActivity
                     Intent intent = new Intent(MainActivity.this, ShopActivity.class);
                     startActivity(intent);
+                    finish();
 
 
                 }

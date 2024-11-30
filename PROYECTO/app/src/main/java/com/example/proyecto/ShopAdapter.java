@@ -9,10 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
     private Context context;
     private OnItemClickListener listener;
 
@@ -25,6 +27,14 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
         this.items = items;
         this.listener = listener;
     }
+    public void updateItems(List<Item> newItems) {
+        this.items.clear();
+        if (newItems != null) {
+            this.items.addAll(newItems);
+        }
+        notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override
