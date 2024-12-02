@@ -3,6 +3,8 @@ package com.example.proyecto;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +28,8 @@ public class ShopActivity extends AppCompatActivity {
     private ShopAdapter adapter;
     private List<Item> items = new ArrayList<>();
     private ProgressBar progressBar;
+    private Datos datos;
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +38,11 @@ public class ShopActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ShopAdapter(this, items, this::purchaseItem);
         recyclerView.setAdapter(adapter);
+        SharedPreferences prefs = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        int id= prefs.getInt("id",-1);
         CargarTienda();
 
     }
@@ -64,6 +69,7 @@ public class ShopActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                 } else {
                     Log.e("Error", "Error al cargar los items: " + response.code());
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 
@@ -80,6 +86,50 @@ public class ShopActivity extends AppCompatActivity {
 
 
     private void purchaseItem(Item item) {
-        Toast.makeText(this, "Attempting to purchase " + item.getType(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Comprando " + item.getType(), Toast.LENGTH_SHORT).show();
+        progressBar.setVisibility(View.VISIBLE);
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8080/")
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ShopService lista = retrofit.create(ShopService.class);
+        lista.purchaseItem(id, item.getId()).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(ShopActivity.this,
+                            "Compra realizada con éxito", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    String message;
+                    switch (response.code()) {
+                        case 401:
+                            message = "No tienes suficientes recursos para comprar este item";
+                            break;
+                        case 404:
+                            message = "Usuario o item no encontrado";
+                            break;
+                        default:
+                            message = "Error en la compra: " + response.code();
+                    }
+                    Toast.makeText(ShopActivity.this, message, Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(ShopActivity.this,
+                        "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("Error", "Error en la compra: " + t.getMessage());
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
 }
