@@ -21,7 +21,7 @@ public class Item {
         this.setValue(value);
     }
 
-    @XmlElement(name = "value")
+    @XmlElement(name = "id")
     public Integer getId() {
         return id;
     }

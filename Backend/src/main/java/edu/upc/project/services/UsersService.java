@@ -34,7 +34,7 @@ public class UsersService {
     @CORS
     @ApiOperation(value = "login a user to the game")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 201, message = "Successful", response = User.class),
             @ApiResponse(code = 404, message = "User and password combination not found"),
             @ApiResponse(code = 500, message = "Validation error")
 
@@ -49,7 +49,7 @@ public class UsersService {
         {
             if (user.getUsername().equals(userlist.getUsername()) && user.getPassword().equals(userlist.getPassword()))
             {
-                return Response.status(201).build();
+                return Response.status(201).entity(userlist).build();
             }
         }
         return Response.status(404).build();
@@ -72,8 +72,8 @@ public class UsersService {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsers() {
-        List<User> pilots = this.gm.listUsers();
-        GenericEntity<List<User>> entity = new GenericEntity<List<User>>(pilots) {};
+        List<User> users = this.gm.listUsers();
+        GenericEntity<List<User>> entity = new GenericEntity<List<User>>(users) {};
         return Response.status(201).entity(entity).build();
     }
 
