@@ -58,10 +58,10 @@ public class SplashScreen extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         MainService login = retrofit.create(MainService.class);
-        Call<Void> call= login.loginUser(datoslogin);
-        call.enqueue(new Callback<Void>() {
+        Call<Datos> call= login.loginUser(datoslogin);
+        call.enqueue(new Callback<Datos>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<Datos> call, Response<Datos> response) {
                 if (response.isSuccessful()) {
                     // Login válido, ir a Shop
                     goToShop();
@@ -71,7 +71,7 @@ public class SplashScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<Datos> call, Throwable t) {
                 // Error de red, nos redirige al loigin
                 Log.e("SplashScreen", "Network error: " + t.getMessage());
                 Toast.makeText(SplashScreen.this,  "Error de conexión, por favor intenta más tarde", Toast.LENGTH_LONG).show();

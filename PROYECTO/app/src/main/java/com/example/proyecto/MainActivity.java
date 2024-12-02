@@ -57,15 +57,17 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         MainService login = retrofit.create(MainService.class);
-        Call<Void> call = login.loginUser(datosLogin);
+        Call<Datos> call = login.loginUser(datosLogin);
         String respuesta = null;
 
-        call.enqueue(new Callback <Void>() {
+        call.enqueue(new Callback <Datos>() {
 
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<Datos> call, Response<Datos> response) {
 
                 if (response.isSuccessful()) {
+                    Datos datosresponse = response.body();
+                    int id= Integer.parseInt(datosresponse.getId());
                     //Login exitoso
                     Toast.makeText(MainActivity.this, "Login exitoso", Toast.LENGTH_SHORT).show();
                     Log.i("INFO", "Sesion Iniciada");
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
                     editor.putBoolean("isLoggedIn", true);
                     editor.putString("username", name);
                     editor.putString("password", password);
+                    editor.putInt("id", id);
                     editor.apply();
                     //Empezar ShopActivity
                     Intent intent = new Intent(MainActivity.this, ShopActivity.class);
@@ -91,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<Datos> call, Throwable t) {
 
                 Toast.makeText(MainActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.i("Error", t.getMessage());

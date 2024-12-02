@@ -8,5 +8,5 @@ import retrofit2.http.POST;
 public interface MainService {
     @POST("game/user/login")
     @Headers("Content-Type: application/json")
-    Call<Void> loginUser(@Body Datos d);
+    Call<Datos> loginUser(@Body Datos d);
 }
