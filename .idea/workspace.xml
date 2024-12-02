@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326170ab-b754-4f37-a57c-1cf7c3d7cf35" name="Changes" comment="" />
+    <list default="true" id="326170ab-b754-4f37-a57c-1cf7c3d7cf35" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Backend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/edu/upc/project/services/UsersService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/edu/upc/project/services/UsersService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,12 +30,12 @@
     &quot;assignee&quot;: &quot;MartinGarciaRevilla&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Pedrorodriguez016/ProjecteDSA.git",
-    "accountId": "256dbab5-8f41-4d5c-bbc2-7062871a57ff"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Pedrorodriguez016/ProjecteDSA.git&quot;,
+    &quot;accountId&quot;: &quot;256dbab5-8f41-4d5c-bbc2-7062871a57ff&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -53,7 +56,7 @@
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/racer21/Desktop/ProjecteDSA/Backend",
+    "last_opened_file_path": "C:/ProyectoDSA/ProjecteDSA/Backend",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",

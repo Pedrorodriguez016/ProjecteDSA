@@ -170,4 +170,13 @@ public class UsersService {
             }
         }
     }
+
+    @OPTIONS
+    @Path("/{id}/inventory/")
+    public Response optionsForAddItemInventory() {
+        return Response.ok()
+                .header("Access-Control-Allow-Methods", "POST, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, Authorization")
+                .build();
+    }
 }

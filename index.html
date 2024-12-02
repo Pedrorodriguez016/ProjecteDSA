@@ -20,40 +20,53 @@
     .card {
       margin-bottom: 20px;
     }
+    .register-link {
+      cursor: pointer;
+      color: blue;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <div class="container mt-5">
-    <!-- Main Title -->
-    <div class="main-title">Proyecto DSA</div>
-
-    <!-- Login Form -->
-    <div class="card">
-      <div class="card-header">
-        <h2>Login</h2>
-      </div>
-      <div class="card-body">
-        <form id="loginForm">
-          <div class="form-group">
-            <label for="username">Usuario:</label>
-            <input type="username" class="form-control" id="username" required>
-          </div>
-          <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" class="form-control" id="password" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Login</button>
-        </form>
-        <div id="loginMessage" class="mt-3"></div>
-      </div>
+<!-- Login Page -->
+<div id="loginPage" class="container mt-5">
+  <div class="main-title">Proyecto DSA</div>
+  <div class="card">
+    <div class="card-header">
+      <h2>Login</h2>
     </div>
-
-    <!-- Register Form -->
-    <div class="card">
-      <div class="card-header">
-        <h2>Register</h2>
+    <div class="card-body">
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">Usuario:</label>
+          <input type="text" class="form-control" id="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" class="form-control" id="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+      <div class="mt-3">
+        ¿No estás registrado?
+        <span class="register-link" data-toggle="modal" data-target="#registroModal">Regístrate aquí</span>
       </div>
-      <div class="card-body">
+      <div id="loginMessage" class="mt-3"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Registro Modal -->
+<div class="modal fade" id="registroModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Registro de Usuario</h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
         <form id="registerForm">
           <div class="form-group">
             <label for="regEmail">Email:</label>
@@ -61,148 +74,232 @@
           </div>
           <div class="form-group">
             <label for="regUsername">Username:</label>
-            <input type="username" class="form-control" id="regUsername" required>
+            <input type="text" class="form-control" id="regUsername" required>
           </div>
           <div class="form-group">
             <label for="regPassword">Password:</label>
             <input type="password" class="form-control" id="regPassword" required>
           </div>
-          <button type="submit" class="btn btn-primary">Register</button>
+          <div class="form-group">
+            <label for="regConfirmPassword">Confirmar Password:</label>
+            <input type="password" class="form-control" id="regConfirmPassword" required>
+          </div>
         </form>
-        <div id="registerMessage" class="mt-3"></div>
       </div>
-    </div>
-
-    <!-- Item List -->
-    <div class="card">
-      <div class="card-header">
-        <h2>Lista de Productos</h2>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="confirmRegisterBtn">Registrar</button>
       </div>
-      <div class="card-body">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Precio</th>
-            </tr>
-          </thead>
-          <tbody id="itemList">
-            <!-- Items will be dynamically added here -->
-          </tbody>
-        </table>
-      </div>
+      <div id="registerMessage" class="text-center"></div>
     </div>
   </div>
+</div>
 
-<!-- Function to request the login an user --> 
-  <script>
-    $(document).ready(function() {
-      // Login form submission
-      $('#loginForm').submit(function(event) {
-        event.preventDefault();
-        const username = $('#username').val();
-        const password = $('#password').val();
-  
-        $.ajax({
-          url: 'http://localhost:8080/game/user/login',
-          method: 'POST',
-          contentType: 'application/json',
-          data: JSON.stringify({ username: username, password: password }),
-          xhrFields: {
-            withCredentials: false
-          },
-          success: function(data, textStatus, xhr) {
-            if (xhr.status === 201) {
-              $('#loginMessage').html('<div class="alert alert-success">Login successful!</div>');
-              // You can add additional logic here for successful login
-            }
-          },
-          error: function(xhr, status, error) {
-            if (xhr.status === 404) {
-              $('#loginMessage').html('<div class="alert alert-danger">Invalid username or password.</div>');
-            } else if (xhr.status === 500) {
-              $('#loginMessage').html('<div class="alert alert-danger">Validation error. Please check your input.</div>');
-            } else {
-              $('#loginMessage').html('<div class="alert alert-danger">An error occurred. Please try again.</div>');
-            }
-          }
-        });
-      });
-    });
-  </script>
+<!-- Página Principal -->
+<div id="mainPage" style="display:none;">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">DSA Proyecto</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="productListLink">Lista de Productos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="purchaseProductsLink">Compra de Productos</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="logoutLink">Cerrar Sesión</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-<!-- Function to request the creation of an user -->
+  <div class="container mt-4" id="mainContent">
+    <!-- Contenido principal se cargará aquí -->
+  </div>
+</div>
+
 <script>
   $(document).ready(function() {
-    $('#registerForm').submit(function(event) {
-      event.preventDefault(); // Prevent the form from submitting normally
-  
-      // Get the form data
-      var email = $('#regEmail').val();
-      var username = $('#regUsername').val();
-      var password = $('#regPassword').val();
-  
-      // Create the data object to send
-      var data = {
-        email: email,
-        username: username,
-        password: password
-      };
-  
-      // Send the AJAX request
+    // Login form submission
+    $('#loginForm').submit(function(event) {
+      event.preventDefault();
+      const username = $('#username').val();
+      const password = $('#password').val();
+
       $.ajax({
-        url: 'http://localhost:8080/game/user/',
-        type: 'POST',
+        url: 'http://localhost:8080/game/user/login',
+        method: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function(response) {
-          // Handle successful registration
-          $('#registerMessage').html('<div class="alert alert-success">Registration successful!</div>');
-          // Clear the form
-          $('#registerForm')[0].reset();
+        data: JSON.stringify({ username, password }),
+        success: function(data, textStatus, xhr) {
+          if (xhr.status === 201) {
+            $('#loginPage').hide();
+            $('#mainPage').show();
+          }
         },
-        error: function(xhr, status, error) {
-          // Handle registration error
-          var errorMessage = xhr.responseText || 'An error occurred during registration.';
-          $('#registerMessage').html('<div class="alert alert-danger">' + errorMessage + '</div>');
+        error: function(xhr) {
+          if (xhr.status === 404) {
+            $('#loginMessage').html('<div class="alert alert-danger">Usuario o contraseña incorrectos.</div>');
+          } else {
+            $('#loginMessage').html('<div class="alert alert-danger">Error al iniciar sesión.</div>');
+          }
         }
       });
     });
+
+    // Registro de usuario
+    $('#confirmRegisterBtn').click(function() {
+      const password = $('#regPassword').val();
+      const confirmPassword = $('#regConfirmPassword').val();
+
+      if (password !== confirmPassword) {
+        $('#registerMessage').html('<div class="alert alert-danger">Las contraseñas no coinciden.</div>');
+        return;
+      }
+
+      const data = {
+        email: $('#regEmail').val(),
+        username: $('#regUsername').val(),
+        password: password
+      };
+
+      $.ajax({
+        url: 'http://localhost:8080/game/user/',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function() {
+          $('#registerMessage').html('<div class="alert alert-success">Registro exitoso.</div>');
+          setTimeout(() => {
+            $('#registroModal').modal('hide');
+            $('#registerForm')[0].reset();
+          }, 2000);
+        },
+        error: function() {
+          $('#registerMessage').html('<div class="alert alert-danger">Error al registrarse.</div>');
+        }
+      });
+    });
+
+    // Lista de productos
+    $('#productListLink').click(function(e) {
+      e.preventDefault();
+
+      $.ajax({
+        url: 'http://localhost:8080/game/store',
+        method: 'GET',
+        success: function(data) {
+          $('#mainContent').html(`
+            <div class="card">
+              <div class="card-header">
+                <h2>Lista de Productos</h2>
+              </div>
+              <div class="card-body">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Tipo</th>
+                      <th>Valor</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${data.map(producto => `
+                      <tr>
+                        <td>${producto.id}</td>
+                        <td>${producto.type}</td>
+                        <td>${producto.value}</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `);
+        },
+        error: function() {
+          $('#mainContent').html('<div class="alert alert-danger">Error al cargar los productos.</div>');
+        }
+      });
+    });
+
+    // Compra de productos
+    $('#purchaseProductsLink').click(function(e) {
+      e.preventDefault();
+
+      $.ajax({
+        url: 'http://localhost:8080/game/store',
+        method: 'GET',
+        success: function(data) {
+          $('#mainContent').html(`
+            <div class="card">
+              <div class="card-header">
+                <h2>Compra de Productos</h2>
+              </div>
+              <div class="card-body">
+                <form id="purchaseForm">
+                  <div class="form-group">
+                    <label for="productSelect">Selecciona un producto:</label>
+                    <select class="form-control" id="productSelect" required>
+                      <option value="">Seleccionar...</option>
+                      ${data.map(producto => `
+                        <option value="${producto.id}">${producto.id} - ${producto.type} - ${producto.value}</option>
+                      `).join('')}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="userId">ID del Usuario:</label>
+                    <input type="number" class="form-control" id="userId" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Comprar</button>
+                </form>
+                <div id="purchaseMessage" class="mt-3"></div>
+              </div>
+            </div>
+          `);
+
+          $('#purchaseForm').submit(function(event) {
+            event.preventDefault();
+            const selectedItemId = $('#productSelect').val();
+            const userId = $('#userId').val();
+
+            $.ajax({
+              url: `http://localhost:8080/game/user/${userId}/inventory/?item=${selectedItemId}`,
+              method: 'PUT',
+              success: function() {
+                $('#purchaseMessage').html('<div class="alert alert-success">Compra realizada con éxito.</div>');
+              },
+              error: function(xhr) {
+                if (xhr.status === 404) {
+                  $('#purchaseMessage').html('<div class="alert alert-danger">Usuario o producto no encontrado.</div>');
+                } else if (xhr.status === 401) {
+                  $('#purchaseMessage').html('<div class="alert alert-danger">No tienes autorización para realizar esta compra.</div>');
+                } else {
+                  $('#purchaseMessage').html('<div class="alert alert-danger">Error al realizar la compra.</div>');
+                }
+              }
+            });
+          });
+        },
+        error: function() {
+          $('#mainContent').html('<div class="alert alert-danger">Error al cargar los productos disponibles.</div>');
+        }
+      });
+    });
+
+    // Cerrar sesión
+    $('#logoutLink').click(function() {
+      $('#mainPage').hide();
+      $('#loginPage').show();
+      $('#loginForm')[0].reset();
+    });
   });
-  </script>
-
-<!-- Function to request the list of items in the store -->
-<script>
-$(document).ready(function() {
-    function loadProducts() {
-        $.ajax({
-            url: 'http://localhost:8080/game/store',
-            method: 'GET',
-            success: function(data) {
-                console.log(data); // Verificar los datos en la consola
-                const itemList = $('#itemList');
-                itemList.empty();
-
-                // Crear filas dinámicamente basándose en el diseño proporcionado
-                data.forEach(function(item) {
-                    itemList.append(`
-                        <tr>
-                            <td>${item.type}</td>
-                            <td>${item.value}</td>
-                        </tr>
-                    `);
-                });
-            },
-            error: function() {
-                alert('Failed to load products');
-            }
-        });
-    }
-
-    // Cargar los productos al inicializar
-    loadProducts();
-});
 </script>
-
 </body>
 </html>
