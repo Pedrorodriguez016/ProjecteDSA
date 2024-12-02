@@ -28,6 +28,15 @@ public class User {
         this.setEmail(email);
     }
 
+    public User(Integer id, String username, String password, String email, Integer money) {
+        this();
+        this.setId(id);
+        this.setUsername(username);
+        this.setPassword(password);
+        this.setEmail(email);
+        this.setMoney(money);
+    }
+
     @XmlElement(name = "id")
     public Integer getId() {
         return this.id;

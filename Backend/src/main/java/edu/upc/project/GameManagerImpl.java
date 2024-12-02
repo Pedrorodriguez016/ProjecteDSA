@@ -34,8 +34,11 @@ public class GameManagerImpl implements GameManager {
 
     //Functions that takes all the values necessaries to construct a new user and
     //passes them as a user object to be initialized
-    public User createUser(Integer id, String name, String password, String email){
-        return this.addUser(new User(id, name, password, email));
+    public User createUser(Integer id, String name, String password, String email, Integer money){
+        if (money == null)
+            return this.addUser(new User(id, name, password, email));
+        else
+            return this.addUser(new User(id, name, password, email, money));
     }
 
     //Function that returns the user with a specific ID number

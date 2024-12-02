@@ -25,8 +25,8 @@ public class UsersService {
     public UsersService() {
         this.gm = GameManagerImpl.getInstance();
         if (gm.sizeUsers()==0) {
-            this.gm.createUser(0, "Jonathan", "iitifjdoe", "g@g.com");
-            this.gm.createUser(1, "Mary", "rfotk98693", "e@e.com");
+            this.gm.createUser(0, "Jonathan", "iitifjdoe", "g@g.com", 653);
+            this.gm.createUser(1, "Mary", "rfotk98693", "e@e.com", 863);
         }
     }
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface GameManager {
 
-    public User createUser(Integer id, String name, String password, String email);
+    public User createUser(Integer id, String name, String password, String email, Integer money);
     public User addUser(User user);
     public User getUser(Integer id);
 
