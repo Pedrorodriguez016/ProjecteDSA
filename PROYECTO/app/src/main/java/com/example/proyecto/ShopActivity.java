@@ -30,6 +30,7 @@ public class ShopActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private Datos datos;
     int id;
+    public static final String BASE_URI = "http://10.0.2.2:8080/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class ShopActivity extends AppCompatActivity {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
+                .baseUrl(BASE_URI)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -105,6 +106,7 @@ public class ShopActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Toast.makeText(ShopActivity.this,
                             "Compra realizada con éxito", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                 }
                 else {
                     String message;

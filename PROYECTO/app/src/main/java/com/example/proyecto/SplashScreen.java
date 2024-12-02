@@ -26,6 +26,7 @@ public class SplashScreen extends AppCompatActivity {
     private static final String KEY_USERNAME = "username";
     private static final String KEY_PASSWORD = "password";
     Intent intent;
+    public static final String BASE_URI = "http://10.0.2.2:8080/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,7 @@ public class SplashScreen extends AppCompatActivity {
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
+                .baseUrl(BASE_URI)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

@@ -23,7 +23,7 @@ public class RegistrarUsuario extends AppCompatActivity{
     private EditText editTextContraseña;
     private EditText editTextEmail;
     private EditText editTextConfirmacion;
-
+    public static final String BASE_URI = "http://10.0.2.2:8080/";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +59,7 @@ public class RegistrarUsuario extends AppCompatActivity{
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
+                .baseUrl(BASE_URI)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
