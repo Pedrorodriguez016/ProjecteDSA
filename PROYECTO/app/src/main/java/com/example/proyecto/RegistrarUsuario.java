@@ -2,6 +2,7 @@ package com.example.proyecto;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -75,8 +76,15 @@ public class RegistrarUsuario extends AppCompatActivity{
                 if (response.isSuccessful()) {
                     //Registro con éxito
                     Toast.makeText(RegistrarUsuario.this, "Registro completado.", Toast.LENGTH_SHORT).show();
+                    SharedPreferences prefs= getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean("isLoggedIn", true);
+                    editor.putString("username", username);
+                    editor.putString("password", password);
+                    editor.apply();
                     Intent intent = new Intent(RegistrarUsuario.this, ShopActivity.class);
                     startActivity(intent);
+                    finish();
 
 
                 } else {
