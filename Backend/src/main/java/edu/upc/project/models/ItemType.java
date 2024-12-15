@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 
 @XmlEnum
-public enum ElementType {
+public enum ItemType {
     @XmlEnumValue("knife") KNIFE,
     @XmlEnumValue("shield") SHIELD,
     @XmlEnumValue("sword") SWORD,

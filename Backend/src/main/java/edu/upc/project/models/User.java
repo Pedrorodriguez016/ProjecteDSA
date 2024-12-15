@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlType;
 import java.util.ArrayList;
 import java.util.List;
 
-@XmlType(propOrder = {"id", "username", "password", "email", "money", "inventory"})
+@XmlType(propOrder = {"id", "username", "password", "email", "money"})
 public class User {
 
     Integer id;
@@ -13,24 +13,20 @@ public class User {
     String password;
     String email;
     Integer money;
-    List<Item> inventory;
 
     public User() {
         this.money = 0;
-        this.inventory = new ArrayList<>();
     }
 
-    public User(Integer id, String username, String password, String email) {
+    public User(String username, String password, String email) {
         this();
-        this.setId(id);
         this.setUsername(username);
         this.setPassword(password);
         this.setEmail(email);
     }
 
-    public User(Integer id, String username, String password, String email, Integer money) {
+    public User(String username, String password, String email, Integer money) {
         this();
-        this.setId(id);
         this.setUsername(username);
         this.setPassword(password);
         this.setEmail(email);
@@ -39,7 +35,7 @@ public class User {
 
     @XmlElement(name = "id")
     public Integer getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Integer id) {
@@ -86,25 +82,8 @@ public class User {
         this.money = money;
     }
 
-    @XmlElement(name = "inventory")
-    public List<Item> getInventory()
-    {
-        return inventory;
-    }
-
-    public void setInventory(List<Item> inventory)
-    {
-        this.inventory = inventory;
-    }
-
-    public void addInventory(Item inventory)
-    {
-        this.inventory.add(inventory);
-    }
-
     @Override
     public String toString() {
-        return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", money=" + money + ", inventory=" + inventory + "]";
+        return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", money=" + money + "]";
     }
-
 }

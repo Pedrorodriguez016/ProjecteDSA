@@ -3,22 +3,24 @@ package edu.upc.project.models;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(propOrder = {"id", "type", "value"})
+@XmlType(propOrder = {"id", "type", "value", "description"})
 public class Item {
 
     Integer id;
-    ElementType type;
+    ItemType type;
     Integer value;
+    String description;
 
-    //Constructor with no arguments that allows the serialization of a Item object
+    //Constructor with no arguments that allows the serialization of an Item object
     public Item() {
     }
 
     //Constructor that defines the main characteristics of an item
-    public Item(Integer id, ElementType type, Integer value) {
+    public Item(Integer id, ItemType type, Integer value, String description) {
         this.setId(id);
         this.setType(type);
         this.setValue(value);
+        this.setDescription(description);
     }
 
     @XmlElement(name = "id")
@@ -31,11 +33,11 @@ public class Item {
     }
 
     @XmlElement(name = "type")
-    public ElementType getType() {
+    public ItemType getType() {
         return this.type;
     }
 
-    public void setType(ElementType type) {
+    public void setType(ItemType type) {
         this.type = type;
     }
 
@@ -48,9 +50,18 @@ public class Item {
         this.value = value;
     }
 
+    @XmlElement(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
-        return "Item [id=" + id + ", type=" + type + ", value=" + value + "]";
+        return "Item [id=" + id + ", type=" + type + ", value=" + value + ", description=" + description + "]";
     }
 
 }
