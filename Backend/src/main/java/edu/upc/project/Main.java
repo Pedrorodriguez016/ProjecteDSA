@@ -1,7 +1,6 @@
 package edu.upc.project;
 
-import edu.upc.project.config.CORSFilter;
-import edu.upc.project.config.MOXyJSON;
+import edu.upc.project.db.DBUtils;
 import io.swagger.jaxrs.config.BeanConfig;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
@@ -10,6 +9,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 import java.io.IOException;
 import java.net.URI;
+import java.sql.Connection;
 
 /**
  * Main class.
@@ -27,10 +27,6 @@ public class Main {
         // create a resource config that scans for JAX-RS resources and providers
         // in edu.upc.dsa package
         final ResourceConfig rc = new ResourceConfig().packages("edu.upc.project.services");
-
-        // Register the custom JacksonJsonProvider
-        rc.register(MOXyJSON.class);
-        rc.register(CORSFilter.class);
 
         rc.register(io.swagger.jaxrs.listing.ApiListingResource.class);
         rc.register(io.swagger.jaxrs.listing.SwaggerSerializers.class);
@@ -53,21 +49,17 @@ public class Main {
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
 
-
     /**
      * Main method.
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
+
         final HttpServer server = startServer();
 
         StaticHttpHandler staticHttpHandler = new StaticHttpHandler("./public/");
         server.getServerConfiguration().addHttpHandler(staticHttpHandler, "/");
-
-
-        System.out.println(String.format("Jersey app started with WADL available at "
-                + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
 
         System.in.read();
         server.stop();
