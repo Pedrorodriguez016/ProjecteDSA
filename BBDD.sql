@@ -14,18 +14,57 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+-- Volcando estructura de base de datos para game
+CREATE DATABASE IF NOT EXISTS `game` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci */;
+USE `game`;
+
+-- Volcando estructura para tabla game.inventory
+CREATE TABLE IF NOT EXISTS `inventory` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user` int(11) NOT NULL,
+  `item` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `item_id` (`item`),
+  KEY `user_id` (`user`),
+  CONSTRAINT `item_id` FOREIGN KEY (`item`) REFERENCES `item` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `user_id` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
 -- Volcando datos para la tabla game.inventory: ~1 rows (aproximadamente)
 INSERT INTO `inventory` (`id`, `user`, `item`, `quantity`) VALUES
-	(1, 1, 1, 2);
+	(1, 1, 1, 3);
+
+-- Volcando estructura para tabla game.item
+CREATE TABLE IF NOT EXISTS `item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` enum('KNIFE','SHIELD','SWORD','POTION','ARMOR') NOT NULL,
+  `value` int(11) NOT NULL DEFAULT 0,
+  `description` varchar(5000) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Volcando datos para la tabla game.item: ~2 rows (aproximadamente)
 INSERT INTO `item` (`id`, `type`, `value`, `description`) VALUES
 	(1, 'KNIFE', 145, 'Un cuchillo sin más. Te ayudará en lo más básico, pero no esperes grandes progresos con esto...'),
 	(2, 'SHIELD', 540, 'Este escudo de madera fue usado por un legendario héroe que solía ir vestido de verde. Parece un escudo normal y corriente, pero no lo subestimes.');
 
--- Volcando datos para la tabla game.user: ~1 rows (aproximadamente)
+-- Volcando estructura para tabla game.user
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(32) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL DEFAULT '0',
+  `password` varchar(255) NOT NULL DEFAULT '0',
+  `email` varchar(100) NOT NULL DEFAULT '0',
+  `money` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Volcando datos para la tabla game.user: ~2 rows (aproximadamente)
 INSERT INTO `user` (`id`, `username`, `password`, `email`, `money`) VALUES
-	(1, '4', '4', '6@2.com', 0),
+	(1, '4', '4', '6@2.com', 555),
 	(2, '15161651', '4', '6161650@2.com', 0);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
