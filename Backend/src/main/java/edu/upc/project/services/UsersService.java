@@ -27,7 +27,7 @@ public class UsersService {
     }
 
     @POST
-    @ApiOperation(value = "login a user to the game")
+    @ApiOperation(value = "Login a user")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = User.class),
             @ApiResponse(code = 404, message = "User and password combination not found"),
@@ -40,28 +40,28 @@ public class UsersService {
     public Response loginUser(User user) throws SQLException {
         if (user.getUsername() == null || user.getPassword() == null)
             return Response.status(500).build();
-        User dbUser = this.gm.getUserbyName(user.getUsername());
+        User dbUser = this.gm.getUser(user.getUsername());
         if (dbUser == null || !dbUser.getPassword().equals(user.getPassword()))
             return Response.status(404).build();
         return Response.status(201).entity(dbUser).build();
     }
 
     @GET
-    @ApiOperation(value = "get a User")
+    @ApiOperation(value = "Get a user")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = User.class),
             @ApiResponse(code = 404, message = "User not found")
     })
-    @Path("/{id}")
+    @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(@PathParam("id") Integer username) throws SQLException {
+    public Response getUser(@PathParam("username") String username) throws SQLException {
         User user = this.gm.getUser(username);
             if (user == null) return Response.status(404).build();
             else  return Response.status(201).entity(user).build();
     }
 
     @POST
-    @ApiOperation(value = "create a new user")
+    @ApiOperation(value = "Create a new user")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = User.class),
             @ApiResponse(code = 500, message = "Validation Error")
@@ -85,9 +85,9 @@ public class UsersService {
             @ApiResponse(code = 201, message = "Successful", response = Inventory.class, responseContainer="List"),
             @ApiResponse(code = 404, message = "User not found")
     })
-    @Path("/{id}/inventory")
+    @Path("/{username}/inventory")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getInventoryUser(@PathParam("id") Integer username) throws SQLException {
+    public Response getInventoryUser(@PathParam("username") String username) throws SQLException {
         User user = this.gm.getUser(username);
         if (user == null) return Response.status(404).build();
         else
@@ -105,10 +105,10 @@ public class UsersService {
             @ApiResponse(code = 404, message = "User/item not found")
 
     })
-    @Path("/{id}/inventory/")
+    @Path("/{username}/inventory/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addItemInventory(@PathParam("id") Integer userID, @QueryParam("item") int itemID) throws SQLException {
-        Integer result = this.gm.addItemInventory(userID, itemID);
+    public Response addItemInventory(@PathParam("username") String username, @QueryParam("item") int itemID) throws SQLException {
+        Integer result = this.gm.addItemInventory(username, itemID);
         switch (result)
         {
             case -1:

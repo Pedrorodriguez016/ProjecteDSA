@@ -19,6 +19,25 @@
 CREATE DATABASE IF NOT EXISTS `game` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci */;
 USE `game`;
 
+-- Volcando estructura para tabla game.faq
+CREATE TABLE IF NOT EXISTS `faq` (
+  `id` int(32) NOT NULL AUTO_INCREMENT,
+  `sender` int(32) NOT NULL,
+  `date` varchar(10) NOT NULL,
+  `question` mediumtext NOT NULL,
+  `answer` mediumtext NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `question` (`question`) USING HASH,
+  KEY `user` (`sender`),
+  CONSTRAINT `user` FOREIGN KEY (`sender`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Volcando datos para la tabla game.faq: ~2 rows (aproximadamente)
+DELETE FROM `faq`;
+INSERT INTO `faq` (`id`, `sender`, `date`, `question`, `answer`) VALUES
+	(1, 2, '2024-12-20', '¿Cómo abrir el juego?', 'Dándole al icono del juego.'),
+	(2, 1, '2014-10-25', '¿Cuándo saldrá el juego en versión final?', 'Próximamente, a mediados de enero del 2025.');
+
 -- Volcando estructura para tabla game.inventory
 CREATE TABLE IF NOT EXISTS `inventory` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -33,6 +52,7 @@ CREATE TABLE IF NOT EXISTS `inventory` (
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Volcando datos para la tabla game.inventory: ~1 rows (aproximadamente)
+DELETE FROM `inventory`;
 INSERT INTO `inventory` (`id`, `user`, `item`, `quantity`) VALUES
 	(1, 1, 1, 3);
 
@@ -46,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `item` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Volcando datos para la tabla game.item: ~2 rows (aproximadamente)
+DELETE FROM `item`;
 INSERT INTO `item` (`id`, `type`, `value`, `description`) VALUES
 	(1, 'KNIFE', 145, 'Un cuchillo sin más. Te ayudará en lo más básico, pero no esperes grandes progresos con esto...'),
 	(2, 'SHIELD', 540, 'Este escudo de madera fue usado por un legendario héroe que solía ir vestido de verde. Parece un escudo normal y corriente, pero no lo subestimes.');
@@ -60,12 +81,14 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Volcando datos para la tabla game.user: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla game.user: ~3 rows (aproximadamente)
+DELETE FROM `user`;
 INSERT INTO `user` (`id`, `username`, `password`, `email`, `money`) VALUES
-	(1, '4', '4', '6@2.com', 555),
-	(2, '15161651', '4', '6161650@2.com', 0);
+	(1, '4', '4', '6@2.com', 260),
+	(2, '15161651', '4', '6161650@2.com', 0),
+	(45, 'testuser', 'testpassword', 'testemail@testemail.com', 1542);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

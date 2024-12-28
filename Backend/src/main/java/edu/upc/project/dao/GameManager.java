@@ -1,9 +1,6 @@
 package edu.upc.project.dao;
 
-import edu.upc.project.models.Inventory;
-import edu.upc.project.models.ItemType;
-import edu.upc.project.models.Item;
-import edu.upc.project.models.User;
+import edu.upc.project.models.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,12 +9,16 @@ public interface GameManager {
 
     User createUser(String name, String password, String email, Integer money) throws SQLException;
     User addUser(User user) throws SQLException;
-    User getUser(Integer username) throws SQLException;
-    User getUserbyName(String username) throws SQLException;
+    User getUser(String username) throws SQLException;
+    User getUserbyID(Integer id) throws SQLException;
 
-    Integer addItemInventory(Integer userID, Integer itemID) throws SQLException;
-    List<Inventory> getInventory(Integer username) throws SQLException;
+    Integer addItemInventory(String userID, Integer itemID) throws SQLException;
+    List<Inventory> getInventory(String username) throws SQLException;
 
     Item getItem(Integer id) throws SQLException;
     List<Item> getItems() throws SQLException;
+
+    FAQ addFAQ(FAQ faq) throws SQLException;
+    FAQ createFAQ(Integer sender, String date, String question, String answer) throws SQLException;
+    List<FAQ> getFAQS() throws SQLException;
 }

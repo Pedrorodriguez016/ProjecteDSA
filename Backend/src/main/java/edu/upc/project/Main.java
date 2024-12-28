@@ -1,6 +1,5 @@
 package edu.upc.project;
 
-import edu.upc.project.db.DBUtils;
 import io.swagger.jaxrs.config.BeanConfig;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
@@ -9,7 +8,6 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 import java.io.IOException;
 import java.net.URI;
-import java.sql.Connection;
 
 /**
  * Main class.

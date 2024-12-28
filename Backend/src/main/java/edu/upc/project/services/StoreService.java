@@ -2,9 +2,7 @@ package edu.upc.project.services;
 
 import edu.upc.project.dao.GameManager;
 import edu.upc.project.dao.GameManagerImpl;
-import edu.upc.project.models.ItemType;
 import edu.upc.project.models.Item;
-import edu.upc.project.models.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
