@@ -4,7 +4,6 @@ import edu.upc.project.models.ItemType;
 import edu.upc.project.util.ObjectHelper;
 import edu.upc.project.util.QueryHelper;
 
-import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,6 +86,9 @@ public class SessionImpl implements Session {
                         } catch (IllegalArgumentException e) {
 //                            System.err.println("Invalid enum value for column 'type': " + enumValue);
                         }
+                    }else if (value instanceof java.sql.Date) {
+                        // Convert java.sql.Date to String
+                        ObjectHelper.setter(o, columnName, value.toString());
                     } else {
                         ObjectHelper.setter(o, columnName, value);
                     }
@@ -212,7 +214,12 @@ public class SessionImpl implements Session {
                         } catch (IllegalArgumentException e) {
 //                            System.err.println("Invalid enum value for column 'type': " + enumValue);
                         }
-                    } else {
+
+                    } else if (value instanceof java.sql.Date) {
+                        // Convert java.sql.Date to String
+                        ObjectHelper.setter(obj, columnName, value.toString());
+                    }
+                    else {
                         ObjectHelper.setter(obj, columnName, value);
                     }
                 }
@@ -239,5 +246,23 @@ public class SessionImpl implements Session {
 
     public List<Object> query(String query, Class theClass, HashMap params) {
         return null;
+    }
+
+    public Integer getNextID(Class theClass, String database)
+    {
+        String selectAUTOINCREMENTQuery = QueryHelper.createQuerySELECTautoINCREMENT(theClass, database);
+        // SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = 'theClass'
+        // and table_schema = 'database';
+
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(selectAUTOINCREMENTQuery)) {
+
+            if (rs.next()) {
+                return rs.getInt(1); //Return the AUTO_INCREMENT value
+            }
+        } catch (SQLException e) {
+            e.getMessage();
+        }
+        return null; // Return null if no AUTO_INCREMENT value is found or an error occurs
     }
 }

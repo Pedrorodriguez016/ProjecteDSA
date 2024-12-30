@@ -99,4 +99,14 @@ public class QueryHelper {
         return sb.toString();
     }
 
+    public static String createQuerySELECTautoINCREMENT(Class theClass, String databaseName)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = '");
+        sb.append(theClass.getSimpleName().toLowerCase());
+        sb.append("' and table_schema = '");
+        sb.append(databaseName);
+        sb.append("';");
+        return sb.toString();
+    }
 }

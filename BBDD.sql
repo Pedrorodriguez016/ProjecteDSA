@@ -21,12 +21,13 @@ USE `game`;
 
 -- Volcando estructura para tabla game.faq
 CREATE TABLE IF NOT EXISTS `faq` (
-  `id` int(32) NOT NULL AUTO_INCREMENT,
-  `sender` int(32) NOT NULL,
-  `date` varchar(10) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sender` int(11) NOT NULL,
+  `date` date NOT NULL,
   `question` mediumtext NOT NULL,
   `answer` mediumtext NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
   UNIQUE KEY `question` (`question`) USING HASH,
   KEY `user` (`sender`),
   CONSTRAINT `user` FOREIGN KEY (`sender`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -45,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `inventory` (
   `item` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
   KEY `item_id` (`item`),
   KEY `user_id` (`user`),
   CONSTRAINT `item_id` FOREIGN KEY (`item`) REFERENCES `item` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
@@ -62,7 +64,8 @@ CREATE TABLE IF NOT EXISTS `item` (
   `type` enum('KNIFE','SHIELD','SWORD','POTION','ARMOR') NOT NULL,
   `value` int(11) NOT NULL DEFAULT 0,
   `description` varchar(5000) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Volcando datos para la tabla game.item: ~2 rows (aproximadamente)
@@ -71,9 +74,51 @@ INSERT INTO `item` (`id`, `type`, `value`, `description`) VALUES
 	(1, 'KNIFE', 145, 'Un cuchillo sin más. Te ayudará en lo más básico, pero no esperes grandes progresos con esto...'),
 	(2, 'SHIELD', 540, 'Este escudo de madera fue usado por un legendario héroe que solía ir vestido de verde. Parece un escudo normal y corriente, pero no lo subestimes.');
 
+-- Volcando estructura para tabla game.message
+CREATE TABLE IF NOT EXISTS `message` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sender` int(11) NOT NULL,
+  `thread` int(11) NOT NULL,
+  `message` longtext NOT NULL,
+  `date` date NOT NULL,
+  `parent_message` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `sender_id` (`sender`),
+  KEY `parent_message` (`parent_message`),
+  KEY `thread_id` (`thread`),
+  CONSTRAINT `parent_message` FOREIGN KEY (`parent_message`) REFERENCES `message` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `sender_id` FOREIGN KEY (`sender`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `thread_id` FOREIGN KEY (`thread`) REFERENCES `thread` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Volcando datos para la tabla game.message: ~2 rows (aproximadamente)
+DELETE FROM `message`;
+INSERT INTO `message` (`id`, `sender`, `thread`, `message`, `date`, `parent_message`) VALUES
+	(1, 1, 2, 'test', '2024-10-05', NULL),
+	(2, 45, 2, 'yay', '2024-10-06', 1);
+
+-- Volcando estructura para tabla game.thread
+CREATE TABLE IF NOT EXISTS `thread` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` text NOT NULL,
+  `date` date NOT NULL,
+  `creator` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `creator_id` (`creator`),
+  CONSTRAINT `creator_id` FOREIGN KEY (`creator`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Volcando datos para la tabla game.thread: ~2 rows (aproximadamente)
+DELETE FROM `thread`;
+INSERT INTO `thread` (`id`, `title`, `date`, `creator`) VALUES
+	(1, 'wow', '2024-10-05', 1),
+	(2, 'wow', '2024-10-05', 1);
+
 -- Volcando estructura para tabla game.user
 CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(32) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL DEFAULT '0',
   `password` varchar(255) NOT NULL DEFAULT '0',
   `email` varchar(100) NOT NULL DEFAULT '0',

@@ -12,4 +12,5 @@ public interface Session<E> {
     void delete(Object object) throws SQLException;                                         // cruD
     List<Object> getAll(Class theClass) throws SQLException;
     List<Object> query(String query, Class theClass, HashMap params);
+    Integer getNextID(Class theClass, String database);
 }
