@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 @Api(value = "/user", description = "Endpoint to User Service")
 @Path("/user")
@@ -77,6 +78,29 @@ public class UsersService {
             return Response.status(201).entity(user).build();
         }
         return Response.status(500).entity(user).build();
+    }
+
+    @POST
+    @ApiOperation(value = "Delete an existing user")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "User deleted successfully"),
+            @ApiResponse(code = 400, message = "Validation error"),
+            @ApiResponse(code = 401, message = "Incorrect user & password combination")
+    })
+    @Path("/{username}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteUser(@PathParam("username") String username, User user) throws SQLException {
+        if (user.getUsername() == null || user.getPassword() == null)
+            return Response.status(400).entity(user).build();
+        User StoredUser = this.gm.getUser(user.getUsername());
+        if (Objects.equals(StoredUser.getUsername(), user.getUsername())
+                && Objects.equals(StoredUser.getPassword(), user.getPassword()))
+        {
+            this.gm.deleteUser(StoredUser);
+            return Response.status(200).entity(user).build();
+        }
+        else
+            return Response.status(401).entity(user).build();
     }
 
     @GET

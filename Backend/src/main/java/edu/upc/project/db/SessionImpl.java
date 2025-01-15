@@ -163,7 +163,6 @@ public class SessionImpl implements Session {
 
             for (int i = 0; i < fields.length; i++) {
                 Object value = ObjectHelper.getter(object, fields[i]);
-                System.out.println("Setting parameter " + (i + 1) + ": " + value);
                 pstm.setObject(i + 1, value);
             }
 

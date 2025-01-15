@@ -74,6 +74,23 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
+    //Function that deletes the user passed as an object
+    public Boolean deleteUser(User user) throws SQLException {
+        Session session = null;
+        try {
+            session = FactorySession.openSession();
+            session.delete(user);
+            logger.info("Deleted user with username " + user.getUsername());
+            return true;
+        }
+        catch (Exception e) {
+            logger.error(e.getCause());
+            return false;
+        }
+        finally {
+            session.close();
+        }
+    }
 
     //Function that adds an item to the inventory of an user
     public Integer addItemInventory(String username, Integer itemID) throws SQLException {
