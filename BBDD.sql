@@ -30,14 +30,11 @@ CREATE TABLE IF NOT EXISTS `faq` (
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `question` (`question`) USING HASH,
   KEY `user` (`sender`),
-  CONSTRAINT `user` FOREIGN KEY (`sender`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `user_faq` FOREIGN KEY (`sender`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Volcando datos para la tabla game.faq: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla game.faq: ~1 rows (aproximadamente)
 DELETE FROM `faq`;
-INSERT INTO `faq` (`id`, `sender`, `date`, `question`, `answer`) VALUES
-	(1, 2, '2024-12-20', '¿Cómo abrir el juego?', 'Dándole al icono del juego.'),
-	(2, 1, '2014-10-25', '¿Cuándo saldrá el juego en versión final?', 'Próximamente, a mediados de enero del 2025.');
 
 -- Volcando estructura para tabla game.inventory
 CREATE TABLE IF NOT EXISTS `inventory` (
@@ -49,14 +46,12 @@ CREATE TABLE IF NOT EXISTS `inventory` (
   UNIQUE KEY `id` (`id`),
   KEY `item_id` (`item`),
   KEY `user_id` (`user`),
-  CONSTRAINT `item_id` FOREIGN KEY (`item`) REFERENCES `item` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `user_id` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+  CONSTRAINT `item_id` FOREIGN KEY (`item`) REFERENCES `item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_id` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Volcando datos para la tabla game.inventory: ~1 rows (aproximadamente)
 DELETE FROM `inventory`;
-INSERT INTO `inventory` (`id`, `user`, `item`, `quantity`) VALUES
-	(1, 1, 1, 3);
 
 -- Volcando estructura para tabla game.item
 CREATE TABLE IF NOT EXISTS `item` (
@@ -87,16 +82,13 @@ CREATE TABLE IF NOT EXISTS `message` (
   KEY `sender_id` (`sender`),
   KEY `parent_message` (`parent_message`),
   KEY `thread_id` (`thread`),
-  CONSTRAINT `parent_message` FOREIGN KEY (`parent_message`) REFERENCES `message` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `sender_id` FOREIGN KEY (`sender`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `thread_id` FOREIGN KEY (`thread`) REFERENCES `thread` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `parent_message` FOREIGN KEY (`parent_message`) REFERENCES `message` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `sender_id` FOREIGN KEY (`sender`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `thread_id` FOREIGN KEY (`thread`) REFERENCES `thread` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Volcando datos para la tabla game.message: ~2 rows (aproximadamente)
 DELETE FROM `message`;
-INSERT INTO `message` (`id`, `sender`, `thread`, `message`, `date`, `parent_message`) VALUES
-	(1, 1, 2, 'test', '2024-10-05', NULL),
-	(2, 45, 2, 'yay', '2024-10-06', 1);
 
 -- Volcando estructura para tabla game.thread
 CREATE TABLE IF NOT EXISTS `thread` (
@@ -107,14 +99,11 @@ CREATE TABLE IF NOT EXISTS `thread` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `creator_id` (`creator`),
-  CONSTRAINT `creator_id` FOREIGN KEY (`creator`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `creator_id` FOREIGN KEY (`creator`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- Volcando datos para la tabla game.thread: ~2 rows (aproximadamente)
 DELETE FROM `thread`;
-INSERT INTO `thread` (`id`, `title`, `date`, `creator`) VALUES
-	(1, 'wow', '2024-10-05', 1),
-	(2, 'wow', '2024-10-05', 1);
 
 -- Volcando estructura para tabla game.user
 CREATE TABLE IF NOT EXISTS `user` (
@@ -128,11 +117,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- Volcando datos para la tabla game.user: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla game.user: ~1 rows (aproximadamente)
 DELETE FROM `user`;
 INSERT INTO `user` (`id`, `username`, `password`, `email`, `money`) VALUES
-	(1, '4', '4', '6@2.com', 260),
-	(2, '15161651', '4', '6161650@2.com', 0),
 	(45, 'testuser', 'testpassword', 'testemail@testemail.com', 1542);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
