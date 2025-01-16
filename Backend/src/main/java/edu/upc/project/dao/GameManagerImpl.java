@@ -74,6 +74,27 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
+    //Function that updates the user passed as an object
+    public User updateUser(User user, String newPassword) throws SQLException {
+        Session session = null;
+        User newUser = null;
+        try {
+            session = FactorySession.openSession();
+            if (newPassword != null)
+                user.setPassword(newPassword);
+            session.update(user);
+            newUser = getUser(user.getUsername());
+            logger.info("Updated user with username " + newUser.getUsername());
+        }
+        catch (Exception e) {
+            logger.error(e.getCause());
+        }
+        finally {
+            session.close();
+        }
+        return newUser;
+    }
+
     //Function that deletes the user passed as an object
     public Boolean deleteUser(User user) throws SQLException {
         Session session = null;
@@ -92,7 +113,7 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
-    //Function that adds an item to the inventory of an user
+    //Function that adds an item to the inventory of a user
     public Integer addItemInventory(String username, Integer itemID) throws SQLException {
         Session session = null;
         User user = null;
