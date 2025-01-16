@@ -145,7 +145,7 @@ public class GameManagerImpl implements GameManager {
             else
             {
                 inventory = (Inventory)session.get(Inventory.class, new String[]{"user", "item"}, new Integer[]{user.getId(), itemID});
-                if (inventory == null)
+                if (inventory.getId() == null)
                 {
                     inventory = new Inventory(user.getId(), itemID);
                     session.save(inventory);
