@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 @Api(value = "/forums", description = "Endpoint to forum service")
 @Path("/forums")
@@ -69,7 +70,7 @@ public class ForumService {
         Message resultMessage = this.gm.addMessage(message);
 
         if (resultMessage == null)
-            return Response.status(500).entity(thread).build();
+            return Response.status(500).build();
 
         return Response.status(201).entity(resultThread).build();
     }
@@ -90,5 +91,32 @@ public class ForumService {
             GenericEntity<List<Message>> entity = new GenericEntity<List<Message>>(this.gm.getMessages(threadID)) {};
             return Response.status(201).entity(entity).build();
         }
+    }
+
+    @POST
+    @ApiOperation(value = "Create a new message for an existing thread")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Message.class),
+            @ApiResponse(code = 400, message = "Invalid input data"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response newMessage(@PathParam("id") Integer threadID, Message message) throws SQLException {
+
+        if (message.getMessage() == null || message.getDate() == null || message.getSender() == null
+        || message.getThread() == null || message.getParent_message() == null)
+            return Response.status(400).build();
+
+        if (gm.getThread(message.getThread()) == null ||
+                !Objects.equals(message.getThread(), gm.getThread(threadID).getId()))
+            return Response.status(400).build();
+
+        Message resultMessage = this.gm.addMessage(message);
+
+        if (resultMessage == null)
+            return Response.status(500).build();
+
+        return Response.status(201).entity(resultMessage).build();
     }
 }
