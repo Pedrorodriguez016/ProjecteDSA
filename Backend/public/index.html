@@ -110,6 +110,9 @@
         <li class="nav-item">
           <a class="nav-link" href="#" id="inventoryLink">Inventario</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="forumLink">Foro</a>
+        </li>
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
@@ -126,227 +129,191 @@
 
 <script>
   $(document).ready(function() {
-    let loggedUserId = null; // Variable para almacenar el ID del usuario logueado
+  let loggedUsername = null;
 
-    // Login form submission
-    $('#loginForm').submit(function(event) {
+  // Login form submission
+  $('#loginForm').submit(function(event) {
       event.preventDefault();
       const username = $('#username').val();
       const password = $('#password').val();
 
       $.ajax({
-        url: 'http://localhost:8080/game/user/login',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ username, password }),
-        success: function(data, textStatus, xhr) {
-          if (xhr.status === 201) {
-            loggedUserId = data.id; // Guardar el ID del usuario logueado
-            $('#loginPage').hide();
-            $('#mainPage').show();
+          url: 'http://localhost:8080/game/user/login',
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({ username, password }),
+          success: function(data) {
+              loggedUsername = data.username;
+              $('#loginPage').hide();
+              $('#mainPage').show();
+          },
+          error: function() {
+              $('#loginMessage').html('<div class="alert alert-danger">Error al iniciar sesión.</div>');
           }
-        },
-        error: function(xhr) {
-          if (xhr.status === 404) {
-            $('#loginMessage').html('<div class="alert alert-danger">Usuario o contraseña incorrectos.</div>');
-          } else {
-            $('#loginMessage').html('<div class="alert alert-danger">Error al iniciar sesión.</div>');
-          }
-        }
       });
-    });
+  });
 
-    // Registro de usuario
-    $('#confirmRegisterBtn').click(function() {
+  // Registro de usuario
+  $('#confirmRegisterBtn').click(function() {
       const password = $('#regPassword').val();
       const confirmPassword = $('#regConfirmPassword').val();
 
       if (password !== confirmPassword) {
-        $('#registerMessage').html('<div class="alert alert-danger">Las contraseñas no coinciden.</div>');
-        return;
+          $('#registerMessage').html('<div class="alert alert-danger">Las contraseñas no coinciden.</div>');
+          return;
       }
 
-      const data = {
-        email: $('#regEmail').val(),
-        username: $('#regUsername').val(),
-        password: password
-      };
-
       $.ajax({
-        url: 'http://localhost:8080/game/user/',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function(response) {
-          loggedUserId = response.id; // Guardar el ID del usuario registrado
-          $('#registerMessage').html('<div class="alert alert-success">Registro exitoso.</div>');
-          setTimeout(() => {
-            $('#registroModal').modal('hide');
-            $('#registerForm')[0].reset();
-          }, 2000);
-        },
-        error: function() {
-          $('#registerMessage').html('<div class="alert alert-danger">Error al registrarse.</div>');
-        }
-      });
-    });
-
-    // Lista de productos
-    $('#productListLink').click(function(e) {
-      e.preventDefault();
-
-      $.ajax({
-        url: 'http://localhost:8080/game/store',
-        method: 'GET',
-        success: function(data) {
-          $('#mainContent').html(`
-            <div class="card">
-              <div class="card-header">
-                <h2>Lista de Productos</h2>
-              </div>
-              <div class="card-body">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Tipo</th>
-                      <th>Valor</th>
-                      <th>Acción</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${data.map(producto => `
-                      <tr>
-                        <td>${producto.id}</td>
-                        <td>${producto.type}</td>
-                        <td>${producto.value}</td>
-                        <td><button class="btn btn-primary comprar-btn" data-id="${producto.id}">Comprar</button></td>
-                      </tr>
-                    `).join('')}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          `);
-
-          // Evento de compra
-          $('.comprar-btn').click(function() {
-            const selectedItemId = $(this).data('id');
-
-            $.ajax({
-              url: `http://localhost:8080/game/user/${loggedUserId}/inventory/?item=${selectedItemId}`,
-              method: 'PUT',
-              success: function() {
-                alert('Compra realizada con éxito.');
-                $('#inventoryLink').click(); // Cargar inventario actualizado
-              },
-              error: function(xhr) {
-                if (xhr.status === 404) {
-                  alert('Usuario o producto no encontrado.');
-                } else if (xhr.status === 401) {
-                  alert('No tienes autorización para realizar esta compra.');
-                } else {
-                  alert('Error al realizar la compra.');
-                }
-              }
-            });
-          });
-        },
-        error: function() {
-          $('#mainContent').html('<div class="alert alert-danger">Error al cargar los productos.</div>');
-        }
-      });
-    });
-
-    // Inventario
-    $('#inventoryLink').click(function(e) {
-      e.preventDefault();
-
-      // Primero obtenemos la lista de usuarios
-      $.ajax({
-        url: 'http://localhost:8080/game/user/',
-        method: 'GET',
-        success: function(users) {
-          // Contenedor para los inventarios
-          let inventoriesHTML = '';
-
-          // Función para procesar inventarios de cada usuario
-          function processUserInventory(index) {
-            if (index >= users.length) {
-              // Todos los usuarios procesados, mostrar resultados
-              $('#mainContent').html(`
-                <div class="card">
-                  <div class="card-header">
-                    <h2>Inventarios de Jugadores</h2>
-                  </div>
-                  <div class="card-body">
-                    ${inventoriesHTML.length > 0 ? inventoriesHTML : '<p class="text-center">No hay inventarios disponibles</p>'}
-                  </div>
-                </div>
-              `);
-              return;
-            }
-
-            // Obtener inventario para cada usuario
-            $.ajax({
-              url: `http://localhost:8080/game/user/${users[index].id}/inventory`,
-              method: 'GET',
-              success: function(items) {
-                inventoriesHTML += `
-                  <div class="mb-4">
-                    <h5>Usuario: ${users[index].username}</h5>
-                    <p><strong>Dinero disponible:</strong> ${users[index].money}</p>
-                    ${items.length === 0 ?
-                      '<p class="text-muted">Este usuario no tiene items en su inventario</p>' :
-                      `<table class="table table-striped">
-                        <thead>
-                          <tr>
-                            <th>ID Producto</th>
-                            <th>Tipo</th>
-                            <th>Valor</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          ${items.map(item => `
-                            <tr>
-                              <td>${item.id}</td>
-                              <td>${item.type}</td>
-                              <td>${item.value}</td>
-                            </tr>
-                          `).join('')}
-                        </tbody>
-                      </table>`
-                    }
-                  </div>
-                `;
-
-                // Procesar siguiente usuario
-                processUserInventory(index + 1);
-              },
-              error: function() {
-                // Si hay error, seguir con el siguiente usuario
-                processUserInventory(index + 1);
-              }
-            });
+          url: 'http://localhost:8080/game/user/',
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({
+              email: $('#regEmail').val(),
+              username: $('#regUsername').val(),
+              password: password
+          }),
+          success: function() {
+              $('#registerMessage').html('<div class="alert alert-success">Registro exitoso.</div>');
+              setTimeout(() => {
+                  $('#registroModal').modal('hide');
+                  $('#registerForm')[0].reset();
+              }, 2000);
+          },
+          error: function() {
+              $('#registerMessage').html('<div class="alert alert-danger">Error al registrarse.</div>');
           }
-
-          // Comenzar procesamiento de usuarios
-          processUserInventory(0);
-        },
-        error: function() {
-          $('#mainContent').html('<div class="alert alert-danger">Error al cargar los usuarios.</div>');
-        }
       });
-    });
+  });
 
-    // Cerrar sesión
-    $('#logoutLink').click(function() {
-      loggedUserId = null; // Limpiar el ID del usuario logueado
+  // Lista de productos
+  $('#productListLink').click(function(e) {
+      e.preventDefault();
+
+      $.ajax({
+          url: 'http://localhost:8080/game/store',
+          method: 'GET',
+          success: function(data) {
+              $('#mainContent').html(`
+                  <div class="card">
+                      <div class="card-header">
+                          <h2>Lista de Productos</h2>
+                      </div>
+                      <div class="card-body">
+                          <table class="table table-striped">
+                              <thead>
+                                  <tr>
+                                      <th>ID</th>
+                                      <th>Tipo</th>
+                                      <th>Valor</th>
+                                      <th>Acción</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  ${data.map(producto => `
+                                      <tr>
+                                          <td>${producto.id}</td>
+                                          <td>${producto.type}</td>
+                                          <td>${producto.value}</td>
+                                          <td><button class="btn btn-primary comprar-btn" data-id="${producto.id}">Comprar</button></td>
+                                      </tr>
+                                  `).join('')}
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              `);
+
+              // Comprar producto
+              $('.comprar-btn').click(function() {
+                  const itemId = $(this).data('id');
+
+                  $.ajax({
+                      url: `http://localhost:8080/game/user/${loggedUsername}/inventory/?item=${itemId}`,
+                      method: 'PUT',
+                      success: function() {
+                          alert('Compra realizada con éxito.');
+                          $('#inventoryLink').click();
+                      },
+                      error: function() {
+                          alert('Error al realizar la compra.');
+                      }
+                  });
+              });
+          },
+          error: function() {
+              $('#mainContent').html('<div class="alert alert-danger">Error al cargar los productos.</div>');
+          }
+      });
+  });
+
+  // Inventario
+  $('#inventoryLink').click(function(e) {
+      e.preventDefault();
+
+      if (!loggedUsername) {
+          alert("El usuario no está logueado correctamente.");
+          return;
+      }
+
+      $.ajax({
+          url: `http://localhost:8080/game/user/${loggedUsername}/inventory`,
+          method: 'GET',
+          success: function(data) {
+              if (!Array.isArray(data)) {
+                  console.error("El inventario no es un array:", data);
+                  $('#mainContent').html('<div class="alert alert-danger">Error en el formato de los datos del inventario.</div>');
+                  return;
+              }
+
+              console.log("Inventario recibido:", data);
+
+              let content = `
+                  <div class="card">
+                      <div class="card-header">
+                          <h2>Inventario</h2>
+                      </div>
+                      <div class="card-body">
+                          ${data.length ? `<table class="table table-striped">
+                              <thead>
+                                  <tr>
+                                      <th>ID</th>
+                                      <th>Usuario</th>
+                                      <th>Item</th>
+                                      <th>Cantidad</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  ${data.map(item => `
+                                      <tr>
+                                          <td>${item.id}</td>
+                                          <td>${item.user}</td>
+                                          <td>${item.item}</td>
+                                          <td>${item.quantity}</td>
+                                      </tr>
+                                  `).join('')}
+                              </tbody>
+                          </table>` : '<p>No tienes items en tu inventario.</p>'}
+                      </div>
+                  </div>
+              `;
+              $('#mainContent').html(content);
+          },
+          error: function(xhr, status, error) {
+              console.error("Error al cargar el inventario:", error);
+              $('#mainContent').html('<div class="alert alert-danger">Error al cargar el inventario.</div>');
+          }
+      });
+  });
+
+  // Cerrar sesión
+  $('#logoutLink').click(function() {
+      loggedUsername = null;
       $('#mainPage').hide();
       $('#loginPage').show();
       $('#loginForm')[0].reset();
-    });
   });
+});
+
 </script>
 </body>
 </html>
