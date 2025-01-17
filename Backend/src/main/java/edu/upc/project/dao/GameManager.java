@@ -10,7 +10,7 @@ public interface GameManager {
 
     User createUser(String name, String password, String email, Integer money) throws SQLException;
     User addUser(User user) throws SQLException;
-    User getUser(String username) throws SQLException;
+    User getUser(String username, String email) throws SQLException;
     User updateUser(User user, String newPassword) throws SQLException;
     Boolean deleteUser(User user) throws SQLException;
 

@@ -32,16 +32,15 @@ public class UsersService {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = User.class),
             @ApiResponse(code = 404, message = "User and password combination not found"),
-            @ApiResponse(code = 500, message = "Validation error")
+            @ApiResponse(code = 500, message = "Internal server error")
 
     })
-
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response loginUser(User user) throws SQLException {
         if (user.getUsername() == null || user.getPassword() == null)
             return Response.status(500).build();
-        User dbUser = this.gm.getUser(user.getUsername());
+        User dbUser = this.gm.getUser(user.getUsername(), null);
         if (dbUser == null || !dbUser.getPassword().equals(user.getPassword()))
             return Response.status(404).build();
         return Response.status(201).entity(dbUser).build();
@@ -56,7 +55,7 @@ public class UsersService {
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@PathParam("username") String username) throws SQLException {
-        User user = this.gm.getUser(username);
+        User user = this.gm.getUser(username, null);
             if (user == null) return Response.status(404).build();
             else  return Response.status(201).entity(user).build();
     }
@@ -65,26 +64,29 @@ public class UsersService {
     @ApiOperation(value = "Create a new user")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = User.class),
-            @ApiResponse(code = 500, message = "Validation Error")
+            @ApiResponse(code = 401, message = "Invalid input data"),
+            @ApiResponse(code = 401, message = "Username and/or email already in use"),
+            @ApiResponse(code = 500, message = "Internal server error")
     })
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newUser(User user) throws SQLException {
         if (user.getUsername() == null || user.getPassword() == null || user.getEmail() == null)
-            return Response.status(500).entity(user).build();
+            return Response.status(400).build();
+        if (gm.getUser(user.getUsername(), null) != null ||
+                gm.getUser(null, user.getEmail()) != null)
+            return Response.status(401).build();
         User result = this.gm.addUser(user);
         if (result != null)
-        {
             return Response.status(201).entity(user).build();
-        }
-        return Response.status(500).entity(user).build();
+        return Response.status(500).build();
     }
 
     @PUT
     @ApiOperation(value = "Update an existing user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "User updated successfully"),
-            @ApiResponse(code = 400, message = "Validation error"),
+            @ApiResponse(code = 400, message = "Invalid input data"),
             @ApiResponse(code = 401, message = "Incorrect user & password combination")
     })
     @Path("/{username}")
@@ -93,7 +95,7 @@ public class UsersService {
     boolean changePass, @QueryParam("newpass") String newPassword, User user) throws SQLException {
         if (user.getUsername() == null || user.getPassword() == null)
             return Response.status(400).entity(user).build();
-        User StoredUser = this.gm.getUser(user.getUsername());
+        User StoredUser = this.gm.getUser(user.getUsername(), null);
         if (Objects.equals(StoredUser.getUsername(), username)
                 && Objects.equals(StoredUser.getPassword(), user.getPassword()))
         {
@@ -111,27 +113,29 @@ public class UsersService {
     @ApiOperation(value = "Delete an existing user")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "User deleted successfully"),
-            @ApiResponse(code = 400, message = "Validation error"),
+            @ApiResponse(code = 400, message = "Invalid input data"),
             @ApiResponse(code = 401, message = "Incorrect user & password combination")
     })
     @Path("/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteUser(@PathParam("username") String username, User user) throws SQLException {
-        if (user.getUsername() == null || user.getPassword() == null)
-            return Response.status(400).entity(user).build();
-        User StoredUser = this.gm.getUser(user.getUsername());
+        if (user.getUsername() == null || user.getPassword() == null || !Objects.equals(user.getUsername(), username))
+            return Response.status(400).build();
+        User StoredUser = this.gm.getUser(user.getUsername(), null);
+        if (StoredUser == null)
+            return Response.status(401).build();
         if (Objects.equals(StoredUser.getUsername(), user.getUsername())
                 && Objects.equals(StoredUser.getPassword(), user.getPassword()))
         {
             this.gm.deleteUser(StoredUser);
-            return Response.status(201).entity(user).build();
+            return Response.status(201).build();
         }
         else
-            return Response.status(401).entity(user).build();
+            return Response.status(401).build();
     }
 
     @GET
-    @ApiOperation(value = "get the inventory of an user")
+    @ApiOperation(value = "Get the inventory of a user")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Inventory.class, responseContainer="List"),
             @ApiResponse(code = 404, message = "User not found")
@@ -139,7 +143,7 @@ public class UsersService {
     @Path("/{username}/inventory")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getInventoryUser(@PathParam("username") String username) throws SQLException {
-        User user = this.gm.getUser(username);
+        User user = this.gm.getUser(username, null);
         if (user == null) return Response.status(404).build();
         else
         {
@@ -149,7 +153,7 @@ public class UsersService {
     }
 
     @PUT
-    @ApiOperation(value = "Add an item to the inventory of an user")
+    @ApiOperation(value = "Add an item to the inventory of a user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful"),
             @ApiResponse(code = 401, message = "Purchase not allowed"),
@@ -163,17 +167,11 @@ public class UsersService {
         switch (result)
         {
             case -1:
-            {
                 return Response.status(404).build();
-            }
             case -2:
-            {
                 return Response.status(401).build();
-            }
             default:
-            {
                 return Response.status(200).build();
-            }
         }
     }
 }

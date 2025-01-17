@@ -48,28 +48,31 @@ public class GameManagerImpl implements GameManager {
         }
     }
 
-    //Function that returns the user with a specific username
-    public User getUser(String username) throws SQLException {
+    //Function that returns the user with a specific username or email
+    public User getUser(String username, String email) throws SQLException {
         Session session = null;
         User user = null;
         try {
             session = FactorySession.openSession();
-            user = (User)session.get(User.class, new String[]{"username"}, new String[]{username});
+            if (username != null)
+                user = (User)session.get(User.class, new String[]{"username"}, new String[]{username});
+            else
+                user = (User)session.get(User.class, new String[]{"email"}, new String[]{email});
         }
         catch (Exception e) {
-            logger.warn(e.getCause());
+            logger.error(e.getCause());
         }
         finally {
             session.close();
         }
         if (user.getUsername() != null)
         {
-            logger.info("Obtained User with username " + username + ": " + user);
+            logger.info("Obtained User with username " + user.getUsername() + ": " + user);
             return user;
         }
         else
         {
-            logger.warn("User with username " + username + " not found");
+            logger.warn("User with username " + user.getUsername() + " not found");
             return null;
         }
     }
@@ -83,7 +86,7 @@ public class GameManagerImpl implements GameManager {
             if (newPassword != null)
                 user.setPassword(newPassword);
             session.update(user);
-            newUser = getUser(user.getUsername());
+            newUser = getUser(user.getUsername(), null);
             logger.info("Updated user with username " + newUser.getUsername());
         }
         catch (Exception e) {
@@ -122,7 +125,7 @@ public class GameManagerImpl implements GameManager {
 
         try {
             session = FactorySession.openSession();
-            user = getUser(username);
+            user = getUser(username, null);
             item = getItem(itemID);
             logger.info("Petition to add to the inventory of user " + username + " the item with ID " + itemID);
             if (user == null)
@@ -182,7 +185,7 @@ public class GameManagerImpl implements GameManager {
             session = FactorySession.openSession();
             // Retrieve all inventory entries
             List<Inventory> unfiltereditemList = session.getAll(Inventory.class);
-            User user = getUser(username);
+            User user = getUser(username, null);
 
             // Filter the list based on the username parameter
             itemList = unfiltereditemList.stream()

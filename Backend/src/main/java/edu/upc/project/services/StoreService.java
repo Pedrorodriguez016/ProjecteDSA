@@ -45,7 +45,7 @@ public class StoreService {
     @ApiOperation(value = "Get a specific item")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Item.class),
-            @ApiResponse(code = 201, message = "Item not found")
+            @ApiResponse(code = 404, message = "Item not found")
     })
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)

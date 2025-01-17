@@ -46,19 +46,20 @@ public class FAQService {
     @POST
     @ApiOperation(value = "Create a new FAQ")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = FAQ.class),
-            @ApiResponse(code = 500, message = "Validation Error")
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 400, message = "Invalid input data"),
+            @ApiResponse(code = 500, message = "Internal server error")
     })
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newFAQ(FAQ faq) throws SQLException {
         if (faq.getSender() == null || faq.getDate() == null || faq.getQuestion() == null
                 || faq.getAnswer() == null)
-            return Response.status(500).entity(faq).build();
+            return Response.status(400).build();
         FAQ result = this.gm.addFAQ(faq);
         if (result != null)
-            return Response.status(201).entity(faq).build();
-        return Response.status(500).entity(faq).build();
+            return Response.status(201).build();
+        return Response.status(500).build();
     }
 
 }

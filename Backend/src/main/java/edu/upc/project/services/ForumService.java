@@ -29,8 +29,7 @@ public class ForumService {
     @GET
     @ApiOperation(value = "Get all threads")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Thread.class),
-            @ApiResponse(code = 404, message = "User not found")
+            @ApiResponse(code = 201, message = "Successful", response = Thread.class)
     })
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
@@ -47,7 +46,7 @@ public class ForumService {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Thread.class),
             @ApiResponse(code = 400, message = "Invalid input data"),
-            @ApiResponse(code = 500, message = "Validation Error")
+            @ApiResponse(code = 500, message = "Internal server error")
     })
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -58,12 +57,12 @@ public class ForumService {
 
         if (thread.getTitle() == null || thread.getCreator() == null || thread.getDate() == null
         || message.getMessage() == null || message.getDate() == null || message.getSender() == null)
-            return Response.status(400).entity(thread).build();
+            return Response.status(400).build();
 
         Thread resultThread = this.gm.addThread(thread);
 
         if (resultThread == null)
-            return Response.status(500).entity(thread).build();
+            return Response.status(500).build();
 
         //We add the ID of the thread to the message that we have created
         message.setThread(resultThread.getId());
