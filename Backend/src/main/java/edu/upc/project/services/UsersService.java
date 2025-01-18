@@ -108,7 +108,6 @@ public class UsersService {
         else
             return Response.status(401).entity(user).build();
     }
-
     @POST
     @ApiOperation(value = "Delete an existing user")
     @ApiResponses(value = {
