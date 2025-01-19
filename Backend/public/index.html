@@ -3,34 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Tienda</title>
+    <title>Dungeon Missadventures</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
         body {
-          background-color: #f8f9fa;
-        }
-        .main-title {
-          margin: 20px 0;
-          text-align: center;
-          font-size: 2.5rem;
-          font-weight: bold;
-        }
-        .card {
-          margin-bottom: 20px;
-        }
-        .register-link {
-          cursor: pointer;
-          color: blue;
-          text-decoration: underline;
-        }
+           background-image: url('images/Dungeon.jpg');
+           background-size: cover;
+           background-repeat: no-repeat;
+           background-attachment: fixed;
+           background-color: #f8f9fa;
+       }
+       .main-title {
+           margin: 20px 0;
+           text-align: center;
+           font-size: 2.5rem;
+           font-weight: bold;
+           color: #ffffff; /* Color claro para el texto */
+       }
+       .card {
+           margin-bottom: 20px;
+       }
+       .register-link {
+           cursor: pointer;
+           color: blue;
+           text-decoration: underline;
+       }
     </style>
 </head>
 <body>
 <!-- Login Page -->
 <div id="loginPage" class="container mt-5">
-    <div class="main-title">Proyecto DSA</div>
+    <div class="main-title">Dungeon Missadventures</div>
     <div class="card">
         <div class="card-header">
             <h2>Login</h2>
@@ -98,20 +103,17 @@
 <!-- Página Principal -->
 <div id="mainPage" style="display:none;">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">DSA Proyecto</a>
+        <a class="navbar-brand" href="#">Dungeons Missadventures</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="productListLink">Lista de Productos</a>
+                    <a class="nav-link" href="#" id="productListLink">Tienda</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#" id="inventoryLink">Inventario</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" id="forumLink">Foro</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#" id="settingsLink">Ajustes</a>
@@ -131,23 +133,20 @@
 </div>
 
 <!-- Crear el contenido de la pestaña de ajustes -->
-<div id="settingsPage" style="display:none;">
-    <div class="container mt-4">
-        <div class="card">
-            <div class="card-header">
-                <h2>Ajustes</h2>
-            </div>
-            <div class="card-body">
-                <p><strong>Usuario:</strong> <span id="settingsUsername"></span></p>
-                <p><strong>Email:</strong> <span id="settingsEmail"></span></p>
-                <button class="btn btn-primary" id="changeEmailBtn">Cambiar Email</button>
-                <button class="btn btn-primary" id="changePasswordBtn">Cambiar Contraseña</button>
-                <button class="btn btn-danger" id="deleteAccountBtn">Eliminar Cuenta</button>
-            </div>
+<div id="settingsPage" class="container mt-4" style="display:none;">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2>Ajustes</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Usuario:</strong> <span id="settingsUsername"></span></p>
+            <p><strong>Email:</strong> <span id="settingsEmail"></span></p>
+            <button class="btn btn-primary" id="changeEmailBtn">Cambiar Email</button>
+            <button class="btn btn-primary" id="changePasswordBtn">Cambiar Contraseña</button>
+            <button class="btn btn-danger" id="deleteAccountBtn">Eliminar Cuenta</button>
         </div>
     </div>
 </div>
-
 <!-- Modal para cambiar el correo -->
 <div class="modal fade" id="changeEmailModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -252,302 +251,304 @@
 
     // Login form submission
     $('#loginForm').submit(function(event) {
-      event.preventDefault();
-      const username = $('#username').val();
-      const password = $('#password').val();
+        event.preventDefault();
+        const username = $('#username').val();
+        const password = $('#password').val();
 
-      $.ajax({
-        url: 'http://localhost:8080/game/user/login',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ username, password }),
-        success: function(data) {
-          loggedUsername = data.username;
-          $('#loginPage').hide();
-          $('#mainPage').show();
-          $('#productListLink').click();
-        },
-        error: function() {
-          $('#loginMessage').html('<div class="alert alert-danger">Error al iniciar sesión.</div>');
-        }
-      });
+        $.ajax({
+            url: 'http://localhost:8080/game/user/login',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ username, password }),
+            success: function(data) {
+                loggedUsername = data.username;
+                $('#loginPage').hide();
+                $('#mainPage').show();
+                $('#productListLink').click();
+            },
+            error: function() {
+                $('#loginMessage').html('<div class="alert alert-danger">Error al iniciar sesión.</div>');
+            }
+        });
     });
 
     // Registro de usuario
     $('#confirmRegisterBtn').click(function() {
-      const password = $('#regPassword').val();
-      const confirmPassword = $('#regConfirmPassword').val();
+        const password = $('#regPassword').val();
+        const confirmPassword = $('#regConfirmPassword').val();
 
-      if (password !== confirmPassword) {
-        $('#registerMessage').html('<div class="alert alert-danger">Las contraseñas no coinciden.</div>');
-        return;
-      }
-
-      $.ajax({
-        url: 'http://localhost:8080/game/user/',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({
-          email: $('#regEmail').val(),
-          username: $('#regUsername').val(),
-          password: password
-        }),
-        success: function() {
-          $('#registerMessage').html('<div class="alert alert-success">Registro exitoso.</div>');
-          setTimeout(() => {
-            $('#registroModal').modal('hide');
-            $('#registerForm')[0].reset();
-          }, 2000);
-        },
-        error: function() {
-          $('#registerMessage').html('<div class="alert alert-danger">Error al registrarse.</div>');
+        if (password !== confirmPassword) {
+            $('#registerMessage').html('<div class="alert alert-danger">Las contraseñas no coinciden.</div>');
+            return;
         }
-      });
+
+        $.ajax({
+            url: 'http://localhost:8080/game/user/',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                email: $('#regEmail').val(),
+                username: $('#regUsername').val(),
+                password: password
+            }),
+            success: function() {
+                $('#registerMessage').html('<div class="alert alert-success">Registro exitoso.</div>');
+                setTimeout(() => {
+                    $('#registroModal').modal('hide');
+                    $('#registerForm')[0].reset();
+                }, 2000);
+            },
+            error: function() {
+                $('#registerMessage').html('<div class="alert alert-danger">Error al registrarse.</div>');
+            }
+        });
     });
 
     // Lista de productos
     $('#productListLink').click(function(e) {
-      e.preventDefault();
-      $('#mainContent').show();
-      $('#settingsPage').hide();
+        e.preventDefault();
+        $('#mainContent').show();
+        $('#settingsPage').hide();
 
-      $.ajax({
-        url: 'http://localhost:8080/game/store',
-        method: 'GET',
-        success: function(data) {
-          $('#mainContent').html(`
-            <div class="card">
-              <div class="card-header">
-                <h2>Lista de Productos</h2>
-              </div>
-              <div class="card-body">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Tipo</th>
-                      <th>Valor</th>
-                      <th>Acción</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${data.map(producto => `
-                      <tr>
-                        <td>${producto.id}</td>
-                        <td>${producto.type}</td>
-                        <td>${producto.value}</td>
-                        <td><button class="btn btn-primary comprar-btn" data-id="${producto.id}">Comprar</button></td>
-                      </tr>
-                    `).join('')}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          `);
+        $.ajax({
+            url: 'http://localhost:8080/game/store',
+            method: 'GET',
+            success: function(data) {
+                $('#mainContent').html(`
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h2>Lista de Productos</h2>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-hover table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tipo</th>
+                                        <th>Valor</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.map(producto => `
+                                        <tr>
+                                            <td>${producto.id}</td>
+                                            <td>${producto.type}</td>
+                                            <td>${producto.value}</td>
+                                            <td><button class="btn btn-success comprar-btn" data-id="${producto.id}">Comprar</button></td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `);
 
-          // Comprar producto
-          $('.comprar-btn').click(function() {
-            const itemId = $(this).data('id');
+                // Comprar producto
+                $('.comprar-btn').click(function() {
+                    const itemId = $(this).data('id');
 
-            $.ajax({
-              url: `http://localhost:8080/game/user/${loggedUsername}/inventory/?item=${itemId}`,
-              method: 'PUT',
-              success: function() {
-                alert('Compra realizada con éxito.');
-                $('#inventoryLink').click();
-              },
-              error: function() {
-                alert('Error al realizar la compra.');
-              }
-            });
-          });
-        },
-        error: function() {
-          $('#mainContent').html('<div class="alert alert-danger">Error al cargar los productos.</div>');
-        }
-      });
+                    $.ajax({
+                        url: `http://localhost:8080/game/user/${loggedUsername}/inventory/?item=${itemId}`,
+                        method: 'PUT',
+                        success: function() {
+                            alert('Compra realizada con éxito.');
+                            $('#inventoryLink').click();
+                        },
+                        error: function() {
+                            alert('Error al realizar la compra.');
+                        }
+                    });
+                });
+            },
+            error: function() {
+                $('#mainContent').html('<div class="alert alert-danger">Error al cargar los productos.</div>');
+            }
+        });
     });
 
     // Inventario
     $('#inventoryLink').click(function(e) {
-      e.preventDefault();
-      $('#mainContent').show();
-      $('#settingsPage').hide();
+        e.preventDefault();
+        $('#mainContent').show();
+        $('#settingsPage').hide();
 
-      if (!loggedUsername) {
-        alert("El usuario no está logueado correctamente.");
-        return;
-      }
-
-      $.ajax({
-        url: `http://localhost:8080/game/user/${loggedUsername}/inventory`,
-        method: 'GET',
-        success: function(data) {
-          if (!Array.isArray(data)) {
-            console.error("El inventario no es un array:", data);
-            $('#mainContent').html('<div class="alert alert-danger">Error en el formato de los datos del inventario.</div>');
+        if (!loggedUsername) {
+            alert("El usuario no está logueado correctamente.");
             return;
-          }
-
-          console.log("Inventario recibido:", data);
-
-          let content = `
-            <div class="card">
-              <div class="card-header">
-                <h2>Inventario</h2>
-              </div>
-              <div class="card-body">
-                ${data.length ? `<table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Usuario</th>
-                      <th>Item</th>
-                      <th>Cantidad</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${data.map(item => `
-                      <tr>
-                        <td>${item.id}</td>
-                        <td>${item.user}</td>
-                        <td>${item.item}</td>
-                        <td>${item.quantity}</td>
-                      </tr>
-                    `).join('')}
-                  </tbody>
-                </table>` : '<p>No tienes items en tu inventario.</p>'}
-              </div>
-            </div>
-          `;
-          $('#mainContent').html(content);
-        },
-        error: function(xhr, status, error) {
-          console.error("Error al cargar el inventario:", error);
-          $('#mainContent').html('<div class="alert alert-danger">Error al cargar el inventario.</div>');
         }
-      });
+
+        $.ajax({
+            url: `http://localhost:8080/game/user/${loggedUsername}/inventory`,
+            method: 'GET',
+            success: function(data) {
+                if (!Array.isArray(data)) {
+                    console.error("El inventario no es un array:", data);
+                    $('#mainContent').html('<div class="alert alert-danger">Error en el formato de los datos del inventario.</div>');
+                    return;
+                }
+
+                console.log("Inventario recibido:", data);
+
+                let content = `
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h2>Inventario</h2>
+                        </div>
+                        <div class="card-body">
+                            ${data.length ? `<table class="table table-hover table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Usuario</th>
+                                        <th>Item</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.map(item => `
+                                        <tr>
+                                            <td>${item.id}</td>
+                                            <td>${item.user}</td>
+                                            <td>${item.item}</td>
+                                            <td>${item.quantity}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>` : '<p>No tienes items en tu inventario.</p>'}
+                        </div>
+                    </div>
+                `;
+                $('#mainContent').html(content);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error al cargar el inventario:", error);
+                $('#mainContent').html('<div class="alert alert-danger">Error al cargar el inventario.</div>');
+            }
+        });
     });
 
     // Mostrar la página de ajustes
     $('#settingsLink').click(function(e) {
-      e.preventDefault();
-      $('#mainContent').hide();
-      $('#settingsPage').show();
-      $('#settingsUsername').text(loggedUsername);
-      // Obtener el correo del usuario logueado
-      $.ajax({
-        url: `http://localhost:8080/game/user/${loggedUsername}`,
-        method: 'GET',
-        success: function(data) {
-          $('#settingsEmail').text(data.email);
-        },
-        error: function() {
-          alert('Error al obtener los datos del usuario.');
-        }
-      });
+        e.preventDefault();
+        $('#mainContent').hide();
+        $('#settingsPage').show();
+        $('#settingsUsername').text(loggedUsername);
+
+        // Obtener el correo del usuario logueado
+        $.ajax({
+            url: `http://localhost:8080/game/user/${loggedUsername}`,
+            method: 'GET',
+            success: function(data) {
+                $('#settingsEmail').text(data.email);
+            },
+            error: function() {
+                alert('Error al obtener los datos del usuario.');
+            }
+        });
     });
 
     // Cambiar el correo del usuario
     $('#changeEmailBtn').click(function() {
-      $('#changeEmailModal').modal('show');
+        $('#changeEmailModal').modal('show');
     });
 
-   $('#confirmChangeEmailBtn').click(function() {
-    const currentUsername = $('#currentUsername').val();
-    const currentPassword = $('#currentPasswordEmail').val();
-    const newEmail = $('#newEmail').val();
-    if (currentUsername && currentPassword && newEmail) {
-      $.ajax({
-        url: `http://localhost:8080/game/user/${loggedUsername}?chgemail=true&newemail=${encodeURIComponent(newEmail)}`,
-        method: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify({ username: currentUsername, password: currentPassword, email: newEmail }),
-        success: function() {
-          alert('Correo actualizado con éxito.');
-          $('#settingsEmail').text(newEmail);
-          $('#changeEmailModal').modal('hide');
-        },
-        error: function() {
-          alert('Error al actualizar el correo.');
+    $('#confirmChangeEmailBtn').click(function() {
+        const currentUsername = $('#currentUsername').val();
+        const currentPassword = $('#currentPasswordEmail').val();
+        const newEmail = $('#newEmail').val();
+        if (currentUsername && currentPassword && newEmail) {
+            $.ajax({
+                url: `http://localhost:8080/game/user/${loggedUsername}?chgemail=true&newemail=${encodeURIComponent(newEmail)}`,
+                method: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({ username: currentUsername, password: currentPassword, email: newEmail }),
+                success: function() {
+                    alert('Correo actualizado con éxito.');
+                    $('#settingsEmail').text(newEmail);
+                    $('#changeEmailModal').modal('hide');
+                },
+                error: function() {
+                    alert('Error al actualizar el correo.');
+                }
+            });
         }
-      });
-    }
-  });
+    });
 
     // Cambiar la contraseña del usuario
     $('#changePasswordBtn').click(function() {
-      $('#changePasswordModal').modal('show');
+        $('#changePasswordModal').modal('show');
     });
 
     $('#confirmChangePasswordBtn').click(function() {
-    const currentPassword = $('#currentPasswordPass').val();
-    const newPassword = $('#newPassword').val();
-    const confirmPassword = $('#confirmPassword').val();
-    if (currentPassword && newPassword && confirmPassword) {
-      if (newPassword === confirmPassword) {
-        $.ajax({
-          url: `http://localhost:8080/game/user/${loggedUsername}?chgpass=true&newpass=${encodeURIComponent(newPassword)}`,
-          method: 'PUT',
-          contentType: 'application/json',
-          data: JSON.stringify({ username: loggedUsername, password: currentPassword }),
-          success: function() {
-            alert('Contraseña actualizada con éxito.');
-            $('#changePasswordModal').modal('hide');
-          },
-          error: function() {
-            alert('Error al actualizar la contraseña.');
-          }
-        });
-      } else {
-        alert('Las contraseñas no coinciden.');
-      }
-    }
-  });
-
-   // Eliminar la cuenta del usuario
-  $('#deleteAccountBtn').click(function() {
-    $('#deleteAccountModal').modal('show');
-  });
-
-  $('#confirmDeleteAccountBtn').click(function() {
-    const password1 = $('#deletePassword1').val();
-    const password2 = $('#deletePassword2').val();
-
-    if (password1 && password2) {
-      if (password1 === password2) {
-        if (confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')) {
-          $.ajax({
-            url: `http://localhost:8080/game/user/${loggedUsername}`,
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ username: loggedUsername, password: password1 }),
-            success: function() {
-              alert('Cuenta eliminada con éxito.');
-              loggedUsername = null;
-              $('#settingsPage').hide();
-              $('#loginPage').show();
-              $('#deleteAccountModal').modal('hide');
-            },
-            error: function() {
-              alert('Error al eliminar la cuenta.');
+        const currentPassword = $('#currentPasswordPass').val();
+        const newPassword = $('#newPassword').val();
+        const confirmPassword = $('#confirmPassword').val();
+        if (currentPassword && newPassword && confirmPassword) {
+            if (newPassword === confirmPassword) {
+                $.ajax({
+                    url: `http://localhost:8080/game/user/${loggedUsername}?chgpass=true&newpass=${encodeURIComponent(newPassword)}`,
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ username: loggedUsername, password: currentPassword }),
+                    success: function() {
+                        alert('Contraseña actualizada con éxito.');
+                        $('#changePasswordModal').modal('hide');
+                    },
+                    error: function() {
+                        alert('Error al actualizar la contraseña.');
+                    }
+                });
+            } else {
+                alert('Las contraseñas no coinciden.');
             }
-          });
         }
-      } else {
-        alert('Las contraseñas no coinciden.');
-      }
-    }
-  });
+    });
+
+    // Eliminar la cuenta del usuario
+    $('#deleteAccountBtn').click(function() {
+        $('#deleteAccountModal').modal('show');
+    });
+
+    $('#confirmDeleteAccountBtn').click(function() {
+        const password1 = $('#deletePassword1').val();
+        const password2 = $('#deletePassword2').val();
+
+        if (password1 && password2) {
+            if (password1 === password2) {
+                if (confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')) {
+                    $.ajax({
+                        url: `http://localhost:8080/game/user/${loggedUsername}`,
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ username: loggedUsername, password: password1 }),
+                        success: function() {
+                            alert('Cuenta eliminada con éxito.');
+                            loggedUsername = null;
+                            $('#settingsPage').hide();
+                            $('#loginPage').show();
+                            $('#deleteAccountModal').modal('hide');
+                        },
+                        error: function() {
+                            alert('Error al eliminar la cuenta.');
+                        }
+                    });
+                }
+            } else {
+                alert('Las contraseñas no coinciden.');
+            }
+        }
+    });
 
     // Cerrar sesión
     $('#logoutLink').click(function() {
-      loggedUsername = null;
-      $('#mainPage').hide();
-      $('#loginPage').show();
-      $('#loginForm')[0].reset();
+        loggedUsername = null;
+        $('#mainPage').hide();
+        $('#loginPage').show();
+        $('#loginForm')[0].reset();
+        $('#settingsPage').hide(); // Ocultar la pestaña de ajustes
     });
-  });
+});
 </script>
 </body>
 </html>
